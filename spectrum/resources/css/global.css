@@ -1,0 +1,10 @@
+.dashboard-container {
+    display: flex;
+    height: 100vh;
+  }
+  
+.main-content {
+    background-color: #f9f9f9;
+    display: flex;
+    flex-direction: column;
+}

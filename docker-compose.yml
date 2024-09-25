@@ -1,0 +1,61 @@
+version: "3.8"
+services:
+#Laravel App
+  spectrum:
+    build:
+      args:
+        user: dev5
+        uid: 1000
+      context: ./
+      dockerfile: Dockerfile
+    image: spectrum
+    restart: unless-stopped
+    working_dir: /var/www/
+    volumes:
+      - ./spectrum:/var/www
+      - ./upload.ini:/usr/local/etc/php/php.ini
+    #command: php artisan octane:start --server=roadrunner
+    networks:
+      - spectrumnetwork  
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
+ #Nginx Service
+  spectrum-app:
+    image: nginx:alpine
+    restart: unless-stopped
+    ports:
+      - 8008:80
+    volumes:
+      - ./spectrum:/var/www
+      - ./nginx/conf.d:/etc/nginx/conf.d
+    networks:
+      - spectrumnetwork 
+  #MySql Service
+  spectrumdb:
+    image: mysql:8
+    restart: unless-stopped
+    tty: true
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_USER: ${DB_USERNAME}
+    networks:
+      - spectrumnetwork
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    restart: always
+    environment:
+      PMA_HOST: ${DB_HOST}
+      PMA_USER: ${DB_USERNAME}
+      PMA_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - ./upload.ini:/usr/local/etc/php/php.ini
+    ports:
+      - "8887:80"
+    networks:
+      - spectrumnetwork
+networks:
+  spectrumnetwork:
+    driver: bridge
