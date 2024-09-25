@@ -15,5 +15,5 @@ yarn-error.log
 /.vscode
 /.github/ISSUE_TEMPLATE
 /public/assets/.DS_Store
-/posse/public/js/*.js
+/spectrum/public/js/*.js
 /public/js/*.js
