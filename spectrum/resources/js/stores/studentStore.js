@@ -21,18 +21,15 @@ export const useStudentStore = defineStore('studentStore', {
     async fetchStudents(page = 1) {
       this.loading = true;
       try {
-        console.log(`Fetching students for page: ${page}`);
-        const response = await client.get(`/students?page=${page}&perPage=${this.perPage}`);
-        this.students = response.data.students;
-        this.totalStudents = response.data.total;
-        this.currentPage = response.data.currentPage;
-        console.log("Students fetched successfully:", this.students);
-      } catch (error) {
-        console.error("Error fetching students:", error.response?.data || error.message);
-        this.error = error.response?.data?.message || "Failed to fetch students.";
-      } finally {
-        this.loading = false;
-      }
+        const response = await client.get('/students',{
+        params: { page, perPage: this.perPage },
+      });
+      this.students = response.data.students;
+      this.totalStudents = response.data.total;
+      this.currentPage = page;
+    } catch (error) {
+      console.error('Failed to fetch students:', error.response.data);
+    }
     },
 
     // Add a new student

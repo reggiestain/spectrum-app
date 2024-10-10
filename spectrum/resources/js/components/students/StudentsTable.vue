@@ -391,7 +391,8 @@ const fetchStudents = async (page = 1) => {
   await studentStore.fetchStudents(page);
   students.value = studentStore.students;
   currentPage.value = studentStore.currentPage;
-  totalPages.value = Math.ceil(studentStore.total / studentStore.perPage);
+  totalPages.value = Math.ceil(studentStore.totalStudents / studentStore.perPage);
+  console.log("total pages: ",totalPages)
 };
 
 const prevPage = () => {
