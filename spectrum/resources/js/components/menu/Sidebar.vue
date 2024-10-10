@@ -11,18 +11,18 @@
         </router-link>
   
         <!-- Therapist Icon with Tooltip -->
-        <a href="#" class="block" title="Therapist" @click="setActive('therapist')" :class="{ 'active': activeItem === 'therapist' }">
+        <router-link to="/therapists" class="block" title="Therapist" @click="setActive('therapist')" :class="{ 'active': activeItem === 'therapist' }">
           <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 opacity-50 hover:opacity-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-1.1 0-2-.9-2-2h4c0 1.1-.9 2-2 2zm3.11-4.25l-.16-.12-.14-.14c-1.16-.98-1.84-2.36-1.84-3.77v-1c0-1.49-1.51-2.68-3.35-2.68-1.84 0-3.35 1.19-3.35 2.68v1c0 1.41-.68 2.79-1.84 3.77l-.14.14-.16.12c-.26.19-.41.51-.41.86h12c0-.35-.15-.67-.41-.86zM12 4.5c.83 0 1.5.67 1.5 1.5S12.83 7.5 12 7.5 10.5 6.83 10.5 6 11.17 4.5 12 4.5z"/>
           </svg>
-        </a>
+        </router-link>
   
         <!-- Student Icon with Tooltip -->
-        <a href="#" class="block" title="Student" @click="setActive('student')" :class="{ 'active': activeItem === 'student' }">
+        <router-link to="/students" class="block" title="Student" @click="setActive('student')" :class="{ 'active': activeItem === 'student' }">
           <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 opacity-50 hover:opacity-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M5 21v-2a4 4 0 014-4h6a4 4 0 014 4v2M12 14a4 4 0 100-8 4 4 0 000 8zM12 14v8M8 21h8"/>
           </svg>
-        </a>
+        </router-link>
   
         <!-- Report Icon with Tooltip -->
         <a href="#" class="block" title="Report" @click="setActive('report')" :class="{ 'active': activeItem === 'report' }">

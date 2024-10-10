@@ -16,6 +16,9 @@ class DatabaseSeeder extends Seeder
             SchoolSeeder::class,        
             RoleSeeder::class,
             UserSeeder::class,
+            TherapyCategorySeeder::class,
+            NeuroClassSeeder::class,
+            TherapistSeeder::class,
         ]);
     }
 }

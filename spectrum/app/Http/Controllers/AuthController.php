@@ -35,7 +35,12 @@ class AuthController extends Controller
             'name' => 'required|string|max:255',
             'surname' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8',
+            'role_id' => 'required',
+            'school_id' => 'required',
+            //'password' => 'required|string|min:8',
+        ], [
+            'role_id.required' => 'The role field is required. Please select a role.',
+            'school_id.required' => 'The school field is required. Please select a school.',
         ]);
 
         if ($validator->fails()) {
@@ -49,8 +54,9 @@ class AuthController extends Controller
             'email' => $request->email,
             'school_id' => $request->school_id,
             'role_id' => $request->role_id,
+            'status'=>'Active',
             'lastlogin'=>Carbon::now(),
-            'password' => Hash::make($request->password),
+            'password' => Hash::make('test123#'),
         ]);
 
         return response()->json([
@@ -73,6 +79,68 @@ class AuthController extends Controller
             'perPage' => $users->perPage(),
             'currentPage' => $users->currentPage(),
             'lastPage' => $users->lastPage(),
+        ]);
+    }
+
+    // Update an existing user
+    public function updateUser(Request $request, $id)
+    {
+        $user = User::find($id);
+
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'User not found'
+            ], 404);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'surname' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email,' . $id,
+            'school_id' => 'required|exists:schools,id', // Ensure school exists
+            'role_id' => 'required|exists:roles,id',     // Ensure role exists
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 400);
+        }
+
+        // Update user information
+        $user->update([
+            'name' => $request->name,
+            'surname' => $request->surname,
+            'email' => $request->email,
+            'phone' => $request->phone ?? $user->phone,
+            'school_id' => $request->school_id ?? $user->school_id,
+            'role_id' => $request->role_id ?? $user->role_id,
+            'birth_date' => $request->birth_date ?? $user->birth_date,
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'User updated successfully',
+        ]);
+    }
+
+    // Delete a user
+    public function deleteUser($id)
+    {
+        $user = User::find($id);
+
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'User not found'
+            ], 404);
+        }
+
+        // Delete the user
+        $user->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'User deleted successfully'
         ]);
     }
 }

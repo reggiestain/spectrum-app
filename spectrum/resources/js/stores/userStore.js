@@ -24,9 +24,9 @@ export const useUserStore = defineStore('user', {
         throw error.response.data;
       }
     },
-    async register(name, email, password) {
+    async register(data) {
       try {
-        const response = await client.post('/register', { name, email, password });
+        const response = await client.post('/register', data);
         this.user = response.data.user;
         this.token = response.data.token;
         client.defaults.headers.common['Authorization'] = `Bearer ${this.token}`;
@@ -50,6 +50,30 @@ export const useUserStore = defineStore('user', {
         this.currentPage = page;
       } catch (error) {
         console.error('Failed to fetch users:', error.response.data);
+      }
+    },
+    async updateUser(id, updatedData) {
+      try {
+        const response = await client.put(`/users/${id}`, updatedData);
+        const index = this.users.findIndex(user => user.id === id);
+        if (index !== -1) {
+          this.users[index] = response.data.user;
+        }
+        return response.data
+      } catch (error) {
+        console.error('Failed to update user:', error.response.data);
+        throw error.response.data;
+      }
+    },
+    async deleteUser(id) {
+      try {
+        await client.delete(`/users/${id}`);
+        this.users = this.users.filter(user => user.id !== id);
+        this.totalUsers -= 1;
+        console.log('User deleted successfully');
+      } catch (error) {
+        console.error('Failed to delete user:', error.response.data);
+        throw error.response.data;
       }
     },
   },

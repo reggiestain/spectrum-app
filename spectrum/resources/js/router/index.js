@@ -5,6 +5,8 @@ import Home from '../components/Home.vue';
 import Login from '../components/Login.vue';
 import Dashboard from '../components/Dashboard.vue';
 import Users from '../components/users/UsersTable.vue';
+import Therapists from '../components/therapists/TherapistsTable.vue';
+import Students from '../components/students/StudentsTable.vue';
 import { useUserStore } from '../stores/userStore';
 
 const routes = [
@@ -28,6 +30,18 @@ const routes = [
     path: '/users',
     name: 'Users',
     component: Users, // Set the component to display for this route
+    meta: { requiresAuth: true }, // Set meta field to indicate route requires authentication
+  },
+  {
+    path: '/therapists',
+    name: 'Therapists',
+    component: Therapists, // Set the component to display for this route
+    meta: { requiresAuth: true }, // Set meta field to indicate route requires authentication
+  },
+  {
+    path: '/students',
+    name: 'Students',
+    component: Students, // Set the component to display for this route
     meta: { requiresAuth: true }, // Set meta field to indicate route requires authentication
   },
   // Add more routes here as needed
