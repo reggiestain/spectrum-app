@@ -71,6 +71,7 @@
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Condition</th>
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Parent</th>
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Class</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Therapist(s)</th>
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Teacher(s)</th>
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Created</th>
               <th class="px-6 py-3"></th>
@@ -106,7 +107,8 @@
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ student.birth_date }}</td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ student.condition }}</td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ student.parent?.name }}</td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ student.class?.name }}</td>              
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ student.class?.name }}</td>    
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ student.therapist?.first_name }} {{ student.therapist?.last_name }}</td>          
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ student.teacher?.first_name }} {{ student.teacher?.last_name }}</td>
               <!--<td class="px-6 py-4 whitespace-nowrap">
                 <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
@@ -366,9 +368,7 @@ const isAddStudentModalOpen = ref(false);
 const newStudent = ref({
   firstName: '',
   lastName: '',
-  email: '',
-  phone: '',
-  specialization: '',
+  birth_date: '',
   condition: '',
   neuro_class_id: '',
   school_id: '',
@@ -379,9 +379,7 @@ const isEditStudentModalOpen = ref(false);
 const currentStudent = ref({
   firstName: '',
   lastName: '',
-  email: '',
-  phone: '',
-  specialization: '',
+  birth_date: '',
   condition: '',
   neuro_class_id: '',
   school_id: '',
@@ -430,9 +428,7 @@ const openEditStudentModal = async (Student) => {
     id:      Student.id,
     firstName: Student.first_name,
     lastName: Student.last_name,
-    email: Student.email,
-    phone: Student.phone,
-    specialization: Student.specialization,
+    birth_date: Student.birth_date,
     condition: Student.condition,
     neuro_class_id: Student.neuro_class_id,
     school_id: Student.school_id,
@@ -461,10 +457,8 @@ const submitEditStudent = async () => {
   const StudentData = {
     first_name: currentStudent.value.firstName,
     last_name: currentStudent.value.lastName,
-    email: currentStudent.value.email,
-    phone: currentStudent.value.phone,
-    specialization: currentStudent.value.specialization,
-    condition: currentStudent.condition,
+    birth_date: currentStudent.value.birth_date,
+    condition: currentStudent.value.condition,
     neuro_class_id: currentStudent.value.neuro_class_id,
     school_id: currentStudent.value.school_id,
     teacher_id: currentStudent.value.teacher_id,
