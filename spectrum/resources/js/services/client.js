@@ -8,8 +8,8 @@ const currentHost = location.host;
 const host = 
         currentHost === 'localhost'
         ? 'http://localhost:8008/api'
-        : currentHost === 'polsinelli-web-app.azurewebsites.net'
-        ? 'https://online.polsinelli.com/api'
+        : currentHost === '159.203.67.242'
+        ? 'http://159.203.67.242/api'
         : 'http://localhost:8008/api';
 const apiClient = axios.create({
     baseURL: host,
