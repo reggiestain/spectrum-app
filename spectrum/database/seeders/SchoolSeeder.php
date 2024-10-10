@@ -15,9 +15,9 @@ class SchoolSeeder extends Seeder
     public function run()
     {
         School::create([
-            'name' => 'NeuroSync',
-            'description' => 'NeuroSync',
-            'email' => 'reggiestain15@gmail.com'
+            'name' => 'Mulan smart educational center',
+            'description' => 'Mulan smart educational center',
+            'email' => 'info@mns.edu.gh'
         ]);
 
     }
