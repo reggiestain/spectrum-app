@@ -2,6 +2,13 @@
     <div class="w-20 h-dvh bg-white border shadow-sm flex flex-col items-center py-4">
       <!-- Sidebar Icons Menu -->
       <nav class="flex flex-col justify-center items-center flex-1 space-y-10">
+        <!-- Dashboard Menu Item -->
+        <router-link to="/dashboard" class="block" title="Dashboard" @click="setActive('dashboard')" :class="{ 'active': activeItem === 'dashboard' }">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 opacity-50 hover:opacity-100" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+            <path d="M3 3h18v18H3V3z"></path>
+            <path d="M9 9h6v6H9V9z"></path>
+          </svg>
+        </router-link>
         <!-- User Icon with Tooltip -->
         <router-link to="/users" class="block" title="User" @click="setActive('user')" :class="{ 'active': activeItem === 'user' }">
           <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 opacity-50 hover:opacity-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
