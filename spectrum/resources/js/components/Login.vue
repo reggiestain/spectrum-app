@@ -1,7 +1,7 @@
 <template>
   <div class="flex h-screen">
     <!-- Left Section -->
-    <div class="w-full lg:w-1/2 flex flex-col justify-center items-center bg-white p-8">
+    <div class="w-full lg:w-1/2 flex flex-col justify-center items-center bg-white p-8" style="background-image: url('/images/neuro-dashimage.png')">
       <div class="text-left w-full max-w-md">
         <h1 class="text-4xl font-semibold text-gray-900 mb-8">
           Welcome to NeuroSync
@@ -72,7 +72,7 @@
       </div>
     </div>
     <!-- Right Section with Brain Image -->
-    <div class="hidden lg:block lg:w-1/2 bg-cover bg-no-repeat bg-right" style="background-image: url('/images/human-brain-image.png');"></div>
+    <div class="hidden lg:block lg:w-1/2 bg-cover bg-no-repeat bg-right" style="background-image: url('/images/neuro-image.png');"></div>
   </div>
 </template>
 
