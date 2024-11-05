@@ -217,7 +217,7 @@
               <label class="block text-gray-700">Parent</label>
               <select v-model="newStudent.teacher_id" class="w-full px-4 py-2 border rounded-lg">
                 <option value="">Select a parent</option>
-                <option v-for="parent in parents" :key="parent.id" :value="parent.id">{{ parent.first_name+""+parent.last_name }}</option>
+                <option v-for="parent in parents" :key="parent.id" :value="parent.id">{{ parent.first_name+" "+parent.last_name }}</option>
               </select>
               <p v-if="validationErrors?.parent_id" class="text-red-500 text-sm">{{ validationErrors.parent_id[0] }}</p>
             </div>
