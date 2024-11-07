@@ -179,7 +179,7 @@
   </div>
    <!-- Add Student Modal -->
    <div v-if="isAddStudentModalOpen" class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-        <div class="bg-white p-8 rounded-lg shadow-lg w-1/3">
+        <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md sm:w-2/3 md:w-1/2 lg:w-1/3">
           <h2 class="text-2xl font-bold mb-4">Add Student</h2>
           <form @submit.prevent="submitAddStudent">
             <div class="mb-4">
