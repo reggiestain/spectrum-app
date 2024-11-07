@@ -62,6 +62,7 @@
 
       <!-- Students Table -->
       <div class="bg-white shadow overflow-hidden sm:rounded-lg flex-1 overflow-auto">
+        <div class="overflow-x-auto">
         <table class="min-w-full divide-y divide-gray-200">
           <thead class="bg-gray-50">
             <tr>
@@ -145,6 +146,7 @@
             </tr>
           </tbody>
         </table>
+      </div>
       </div>
 
       <!-- Pagination -->
