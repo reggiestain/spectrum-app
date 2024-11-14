@@ -522,16 +522,16 @@ const submitEditStudent = async () => {
     console.log("Students: ",students)
   } catch (error) {
     if (error.response) {
-      if (error.response.status === 422 || error.response.status === 400) {
+      if (error.response.status === 422) {
         validationErrors.value = error.response.data.errors;
-      } else {
+      } else if(error.response.status === 400){
         console.error('First error occurred:', error);
-        validationErrors.value = error.response.data.errors;
+        validationErrors.value = error;
         
       }
     } else {
       console.error('Second error occurred:', error);
-      validationErrors.value = error.response.data.errors;
+      validationErrors.value = error;
     }
   }
 };
