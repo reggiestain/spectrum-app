@@ -526,11 +526,11 @@ const submitEditStudent = async () => {
         validationErrors.value = error.response.data.errors;
       } else {
         validationErrors.value = error.response.data.errors;
-        console.error('An error occurred:', error);
+        console.error('First error occurred:', error);
       }
     } else {
       validationErrors.value = error.response.data.errors;
-      console.error('An error occurred:', error);
+      console.error('Second error occurred:', error);
     }
   }
 };
