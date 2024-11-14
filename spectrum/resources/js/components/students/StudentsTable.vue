@@ -525,9 +525,11 @@ const submitEditStudent = async () => {
       if (error.response.status === 422 || error.response.status === 400) {
         validationErrors.value = error.response.data.errors;
       } else {
+        validationErrors.value = error.response.data.errors;
         console.error('An error occurred:', error);
       }
     } else {
+      validationErrors.value = error.response.data.errors;
       console.error('An error occurred:', error);
     }
   }
