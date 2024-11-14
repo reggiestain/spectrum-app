@@ -107,9 +107,13 @@
               </td>             
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ student.birth_date }}</td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ student.condition }}</td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ student.parent?.name }}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ student.parent?.first_name}} {{student.parent?.last_name}}</td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ student.class?.name }}</td>    
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ student.therapist?.first_name }} {{ student.therapist?.last_name }}</td>          
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                <span v-for="(therapist, index) in student.therapists" :key="therapist.id">
+                  {{ therapist.first_name }} {{ therapist.last_name }}<span v-if="index < student.therapists.length - 1">, </span>
+                </span>
+              </td>          
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ student.teacher?.first_name }} {{ student.teacher?.last_name }}</td>
               <!--<td class="px-6 py-4 whitespace-nowrap">
                 <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
@@ -217,7 +221,7 @@
             <!-- Parent Dropdown -->
             <div class="mb-4">
               <label class="block text-gray-700">Parent</label>
-              <select v-model="newStudent.teacher_id" class="w-full px-4 py-2 border rounded-lg">
+              <select v-model="newStudent.parent_id" class="w-full px-4 py-2 border rounded-lg">
                 <option value="">Select a parent</option>
                 <option v-for="parent in parents" :key="parent.id" :value="parent.id">{{ parent.first_name+" "+parent.last_name }}</option>
               </select>
@@ -232,15 +236,22 @@
               </select>
               <p v-if="validationErrors?.teacher_id" class="text-red-500 text-sm">{{ validationErrors.teacher_id[0] }}</p>
             </div>
-            <!-- Therapist Dropdown -->
             <div class="mb-4">
-              <label class="block text-gray-700">Therapist</label>
-              <select v-model="newStudent.therapist_id" class="w-full px-4 py-2 border rounded-lg">
-                <option value="">Select a therapist</option>
-                <option v-for="therapist in therapists" :key="therapist.id" :value="therapist.id">{{ therapist.first_name+" "+therapist.last_name }}</option>
-              </select>
-              <p v-if="validationErrors?.therapist_id" class="text-red-500 text-sm">{{ validationErrors.therapist_id[0] }}</p>
-            </div>
+            <label class="block text-gray-700">Select Therapists</label>
+            <MultiSelect
+              v-model="newStudent.therapist_ids"
+              display="chip"
+              :options="formattedTherapists"
+              optionLabel="name"
+              placeholder="Select therapists"
+              :maxSelectedLabels="3"
+              class="w-full border border-gray-300 rounded-lg shadow-sm"
+              filter
+            />
+            <p v-if="validationErrors?.therapist_ids" class="text-red-500 text-sm">
+              {{ validationErrors.therapist_ids[0] }}
+            </p>
+          </div>
             <!-- School Dropdown -->
             <div class="mb-4">
               <label class="block text-gray-700">School</label>
@@ -296,7 +307,7 @@
         <label class="block text-gray-700">Parent</label>
         <select v-model="currentStudent.parent_id" class="w-full px-4 py-2 border rounded-lg">
           <option value="">Select a parent</option>
-          <option v-for="parent in parents" :key="parent.id" :value="parent.id">{{ parent.first_name+""+parent.last_name }}</option>
+          <option v-for="parent in parents" :key="parent.id" :value="parent.id">{{ parent.first_name+" "+parent.last_name }}</option>
         </select>
         <p v-if="validationErrors?.parent_id" class="text-red-500 text-sm">{{ validationErrors.parent_id[0] }}</p>
       </div>
@@ -312,11 +323,20 @@
       <!-- Therapist Dropdown -->
       <div class="mb-4">
         <label class="block text-gray-700">Therapist</label>
-        <select v-model="currentStudent.therapist_id" class="w-full px-4 py-2 border rounded-lg">
-          <option value="">Select a therapist</option>
-          <option v-for="therapist in therapists" :key="therapist.id" :value="therapist.id">{{ therapist.first_name+" "+therapist.last_name }}</option>
-        </select>
-        <p v-if="validationErrors?.therapist_id" class="text-red-500 text-sm">{{ validationErrors.therapist_id[0] }}</p>
+        <!-- PrimeVue MultiSelect Component -->
+        <MultiSelect 
+          v-model="currentStudent.therapist_ids" 
+          :options="formattedTherapists" 
+          display="chip"
+          optionLabel="name" 
+          :filter="true" 
+          placeholder="Select Therapist(s)" 
+          class="w-full border border-gray-300 rounded-lg shadow-sm"
+        />
+        <!-- Error Message -->
+        <p v-if="validationErrors?.therapist_ids" class="text-red-500 text-sm">
+          {{ validationErrors.therapist_ids[0] }}
+        </p>
       </div>
       <!-- School Dropdown -->
       <div class="mb-4">
@@ -338,7 +358,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { useStudentStore } from '../../stores/studentStore';
 import { useSchoolStore } from '../../stores/useSchoolStore';
 import { useTherapistStore } from '../../stores/therapistStore';
@@ -348,6 +368,7 @@ import { useClasStore } from '../../stores/clasStore';
 import Sidebar from '../menu/Sidebar.vue';
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
+import MultiSelect from 'primevue/multiselect';
 
 const studentStore = useStudentStore();
 const schoolStore = useSchoolStore();
@@ -367,6 +388,15 @@ const totalPages = ref(1);
 const validationErrors = ref({});
 const activeDropdown = ref(null);
 const isAddStudentModalOpen = ref(false);
+
+// Format therapist names for the dropdown display
+const formattedTherapists = computed(() => 
+  therapists.value.map(t => ({
+    id: t.id,
+    name: `${t.first_name} ${t.last_name}`
+  }))
+)
+
 const newStudent = ref({
   firstName: '',
   lastName: '',
@@ -375,19 +405,25 @@ const newStudent = ref({
   neuro_class_id: '',
   school_id: '',
   teacher_id: '',
-  therapy_id: '',
+  therapist_ids: [],
+  parent_id: '',
 });
+
 const isEditStudentModalOpen = ref(false);
+
 const currentStudent = ref({
+  id: '',
   firstName: '',
   lastName: '',
   birth_date: '',
   condition: '',
+  parent_id: '',
   neuro_class_id: '',
   school_id: '',
   teacher_id: '',
-  therapist_id: ''
+  therapist_ids: [],
 });
+
 
 const fetchStudents = async (page = 1) => {
   await studentStore.fetchStudents(page);
@@ -411,18 +447,20 @@ const nextPage = () => {
 // Fetch schools on modal open
 const openAddStudentModal = async () => {
   isAddStudentModalOpen.value = true;
-    await teacherStore.fetchTeachers()
-    teachers.value = teacherStore.teachers;
-    console.log('teach: ',teachers.value);
-    await parentStore.fetchParents()
-    parents.value = parentStore.parents;
-    await schoolStore.fetchSchools(); // Fetch schools if not already loaded
-    schools.value = schoolStore.schools;
-    await therapistStore.fetchTherapists()
-    therapists.value = therapistStore.therapists;
-    await clasTypeStore.fetchClas()
-    clases.value = clasTypeStore.clas;
-}  
+  await Promise.all([
+    teacherStore.fetchTeachers(),
+    parentStore.fetchParents(),
+    schoolStore.fetchSchools(),
+    therapistStore.fetchTherapists(),
+    clasTypeStore.fetchClas()
+  ]);
+  teachers.value = teacherStore.teachers;
+  parents.value = parentStore.parents;
+  schools.value = schoolStore.schools;
+  therapists.value = therapistStore.therapists;
+  clases.value = clasTypeStore.clas;
+};
+
 
 const openEditStudentModal = async (Student) => {
   isEditStudentModalOpen.value = true;
@@ -436,7 +474,11 @@ const openEditStudentModal = async (Student) => {
     neuro_class_id: Student.neuro_class_id,
     school_id: Student.school_id,
     teacher_id: Student.teacher_id,
-    therapist_id: Student.therapist_id
+    parent_id: Student.parent_id,
+    therapist_ids: Student.therapists.map(t => ({
+      id: t.id,
+      name: `${t.first_name} ${t.last_name}`
+    })),
   };
 
   await teacherStore.fetchTeachers()
@@ -463,9 +505,10 @@ const submitEditStudent = async () => {
     birth_date: currentStudent.value.birth_date,
     condition: currentStudent.value.condition,
     neuro_class_id: currentStudent.value.neuro_class_id,
+    parent_id: currentStudent.value.parent_id,
     school_id: currentStudent.value.school_id,
     teacher_id: currentStudent.value.teacher_id,
-    therapist_id: currentStudent.value.therapist_id
+    therapist_ids: currentStudent.value.therapist_ids.map(t => t.id),
   };
   try {
     const data = await studentStore.updateStudent(currentStudent.value.id, StudentData); // Call API to update Student
@@ -492,6 +535,7 @@ const closeAddStudentModal = () => {
 
 const submitAddStudent = async () => {
   
+  console.log("therapist: ",newStudent.value.therapist_ids)
   const StudentData = {
     first_name: newStudent.value.firstName,
     last_name: newStudent.value.lastName,
@@ -499,8 +543,8 @@ const submitAddStudent = async () => {
     school_id: newStudent.value.school_id,
     condition: newStudent.value.condition,
     parent_id: newStudent.value.parent_id,
-    therapist_id: newStudent.value.therapist_id,
-    teacher_id: currentStudent.value.teacher_id,
+    therapist_id: newStudent.value.therapist_ids,
+    teacher_ids: newStudent.value.teacher_id,
     neuro_class_id: newStudent.value.neuro_class_id, // Ensure this is correct
   };
 
@@ -516,7 +560,7 @@ const submitAddStudent = async () => {
       condition: '',
       parent_id: '',
       teacher_id: '',
-      therapist_id: '',
+      therapist_ids: [],
       neuro_class_id: ''
     };
     toast.success("Student created successfully.", {

@@ -15,9 +15,9 @@ class Student extends Model
     ];
 
     // Relationships
-    public function therapist()
+    public function therapists()
     {
-        return $this->belongsTo(Therapist::class);
+        return $this->belongsToMany(Therapist::class, 'student_therapists', 'student_id', 'therapist_id');
     }
 
     public function school()

@@ -17,7 +17,7 @@ class StudentController extends Controller
         $page = $request->query('page', 1); // Default to page 1
 
         // Fetch paginated therapists
-        $students = Student::with(['parent','teacher','class','therapist','school'])->
+        $students = Student::with(['parent','teacher','class','therapists','school'])->
                             paginate($perPage, ['*'], 'page', $page);
 
         return response()->json([
@@ -45,6 +45,7 @@ class StudentController extends Controller
             //'parent_id.required' => 'The parent field is required',
             'neuro_class_id.required' => 'The class field is required',
             'school_id.required' => 'The school field is required. Please select a school.',
+            'teacher_id.required' => 'Teacher field is required. Please select a teacher.',
         ]);
 
         if ($validator->fails()) {
@@ -84,29 +85,35 @@ class StudentController extends Controller
             'name' => 'sometimes|required|string|max:255',
             'surname' => 'sometimes|required|string|max:255',
             'email' => 'sometimes|required|string|email|max:255|unique:students,email,' . $id,
-            'school_id' => 'sometimes|required|integer',
-            'birth_date' => 'sometimes|required|date',
-            'therapists' => 'array',
-            'therapists.*' => 'exists:therapists,id',
-            'parents' => 'array',
-            'parents.*' => 'exists:parents,id',
-            'class_types' => 'array',
-            'class_types.*' => 'exists:class_types,id',
+            'birth_date' => 'sometimes|nullable|date',
+            'therapist_ids' => 'array', // Allow therapist_ids as an array
+            'therapist_ids.*.id' => 'exists:therapists,id', // Each therapist ID must exist in therapists table
+            'teacher_id' => 'sometimes|required|integer',
+            'teacher_id.*' => 'exists:teachers,id',
+            'parent_id' => 'sometimes|required|integer',
+            'parent_id.*' => 'exists:parents,id',
+            'neuro_class_id' => 'sometimes|required|integer',
+            'neuro_class_id.*' => 'exists:neuro_classes,id',
         ]);
 
         if ($validator->fails()) {
             return response()->json($validator->errors(), 400);
         }
 
-        // Update student
-        $student->update($request->all());
+        // Update student basic details
+        $student->update($request->only(['first_name', 'last_name', 'email', 'school_id','neuro_class_id','updated_at',
+                                         'birth_date','teacher_id','parent_id','condition','address','created_at']));
+
+        // Update therapists relationship
+        if ($request->has('therapist_ids')) {
+            $student->therapists()->sync($request->therapist_ids); // Sync therapists with provided IDs
+        }
 
         return response()->json([
             'success' => true,
             'message' => 'Student updated successfully.',
         ]);
     }
-
 
     // Remove the specified student from storage.
     public function destroy($id)

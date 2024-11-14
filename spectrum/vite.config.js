@@ -15,6 +15,7 @@ export default defineConfig({
         alias: {
             '@': path.resolve(__dirname, 'resources/js'), // Alias for your JS files
             'images': path.resolve(__dirname, 'public/images'), // Alias for your images
+            'primevue': path.resolve(__dirname, 'node_modules/primevue'),  // New alias for PrimeVue
         },
     },
     server: {
