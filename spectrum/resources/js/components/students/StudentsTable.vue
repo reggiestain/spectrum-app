@@ -519,6 +519,7 @@ const submitEditStudent = async () => {
     });
     closeEditStudentModal();
     fetchStudents(currentPage.value); // Reload the Student list
+    validationErrors = {}
     console.log("Students: ",students)
   } catch (error) {
     if (error.response) {
