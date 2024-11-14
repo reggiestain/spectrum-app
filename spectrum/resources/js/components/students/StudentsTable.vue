@@ -521,8 +521,12 @@ const submitEditStudent = async () => {
     fetchStudents(currentPage.value); // Reload the Student list
     console.log("Students: ",students)
   } catch (error) {
-    if (error.response && error.response.status === 422) {
-      validationErrors.value = error.response.data.errors;
+    if (error.response) {
+      if (error.response.status === 422 || error.response.status === 400) {
+        validationErrors.value = error.response.data.errors;
+      } else {
+        console.error('An error occurred:', error);
+      }
     } else {
       console.error('An error occurred:', error);
     }
