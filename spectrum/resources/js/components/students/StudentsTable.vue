@@ -109,12 +109,14 @@
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ student.condition }}</td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ student.parent?.first_name}} {{student.parent?.last_name}}</td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ student.class?.name }}</td>    
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-              <span v-for="(therapist, index) in student.therapists" :key="therapist.id">
-                {{ therapist.first_name }} {{ therapist.last_name }} 
-                <span class="text-gray-500">({{ therapist.specialization }})</span>
-                <span v-if="index < student.therapists.length - 1"><br/> </span>
-              </span>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900"> 
+                  <span v-for="(therapist, index) in student.therapists" :key="therapist.id">
+                    <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
+                      {{ therapist.first_name }} {{ therapist.last_name }}   
+                    </a>
+                    <span class="text-blue-600 dark:text-blue-500">({{ therapist.specialization }})</span>
+                    <span v-if="index < student.therapists.length - 1"><br/> </span>
+                  </span>
             </td>       
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ student.teacher?.first_name }} {{ student.teacher?.last_name }}</td>
               <!--<td class="px-6 py-4 whitespace-nowrap">
