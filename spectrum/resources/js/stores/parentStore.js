@@ -7,7 +7,7 @@ export const useParentStore = defineStore('parentStore', {
     parents: [],
     totalparents: 0,
     currentPage: 1,
-    perPage: 10,
+    perPage: 40,
     error: null,
     loading: false,
   }),
