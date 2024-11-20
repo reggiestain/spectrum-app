@@ -11,7 +11,7 @@ class ParentController extends Controller
     // List all parents
     public function index(Request $request)
     {
-        $perPage = $request->input('perPage', 10); // Default to 10 per page
+        $perPage = $request->input('perPage', 40); // Default to 10 per page
         $parents = ParentModel::paginate($perPage);
         return response()->json([
             'parents' => $parents->items(),  // Actual data
