@@ -75,7 +75,7 @@
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Therapist(s)</th>
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Teacher(s)</th>
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Created</th>
-              <th class="px-6 py-3"></th>
+              <th class="px-6 py-3">Actions</th>
             </tr>
           </thead>
           <tbody class="bg-white divide-y divide-gray-200">
@@ -122,17 +122,17 @@
                   Active
                 </span>
               </td>-->
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ student.created_at }}</td>
-              <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ formatDate(student.created_at) }}</td>
+              <!---<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
               <div class="relative inline-block text-left">
                 <div>
                   <button
                     @click="toggleMenu(student.id)"
                     type="button"
                     class="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
-                  >
+                  >-->
                   <!-- Vertical Ellipsis Icon -->
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                  <!---<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                     <path d="M10 6a2 2 0 110-4 2 2 0 010 4zm0 5a2 2 0 110-4 2 2 0 010 4zm0 5a2 2 0 110-4 2 2 0 010 4z" />
                   </svg>
                   </button>
@@ -148,13 +148,68 @@
                   </div>
                 </div>
               </div>
+            </td>-->
+            <td class="p-3 text-center flex gap-2 justify-center">
+              <!-- View Button -->
+              <!--<button
+              @click="viewFile(document)"
+              class="text-blue-500 hover:text-blue-400 focus:outline-none"
+              title="View"
+              >
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 5C7 5 2.73 8.11 1 12c1.73 3.89 6 7 11 7s9.27-3.11 11-7c-1.73-3.89-6-7-11-7zm0 12c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
+                <circle cx="12" cy="12" r="2.5" />
+              </svg>
+              </button>-->
+
+              <!-- Download Button -->
+              <!--<button
+              @click="downloadFile(document)"
+              class="text-green-500 hover:text-green-400 focus:outline-none"
+              title="Download"
+              >
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M5 20h14v-2H5v2zm7-18L5.33 10h4.42v4h5.5v-4h4.42L12 2z" />
+              </svg>
+              </button>-->
+
+            <!-- Edit Button -->
+              <button
+                @click="editStudent(student.id)"
+                class="text-yellow-500 hover:text-yellow-400 focus:outline-none"
+                title="Edit"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zm3 1.41L5.66 19H5v-.66l1.41-1.41 1.34 1.34zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
+                </svg>
+              </button>
+
+              <!-- Upload Button -->
+              <button
+                @click="openUploadModal(student.id)"
+                class="text-purple-500 hover:text-purple-400 focus:outline-none"
+                title="Upload"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M5 20h14v-2H5v2zm7-16L5.33 12h4.42v4h5.5v-4h4.42L12 4zm0 12v-8h1.5v8H12z" />
+                </svg>
+              </button>
+
+              <button
+                @click="removeDocument(document)"
+                class="text-red-500 hover:text-red-400 focus:outline-none"
+                title="Delete"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M16 9v10H8V9h8m-1.5-6h-5l-1 1H5v2h14V4h-3.5l-1-1z" />
+                </svg>
+              </button>
             </td>
             </tr>
           </tbody>
         </table>
       </div>
       </div>
-
       <!-- Pagination -->
       <div class="mt-4 flex justify-center space-x-4">
         <button
@@ -183,6 +238,106 @@
           Next
         </button>
       </div>
+    </div>
+  </div>
+  <!--Modal Upload-->
+  <div v-if="isUploadModalOpen" class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+    <!-- Modal Box -->
+    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md sm:w-2/3 md:w-1/2 lg:w-1/3 max-h-screen overflow-y-auto">
+      <!-- Modal Header -->
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-2xl font-bold">Upload Therapist Report</h2>
+        <button
+          @click="closeUploadModal"
+          class="text-gray-500 hover:text-gray-700 focus:outline-none"
+          aria-label="Close"
+        >
+          ✖
+        </button>
+      </div>
+
+      <!-- Upload Form -->
+      <form @submit.prevent="uploadFile">
+        <!-- Teacher Dropdown -->
+        <div class="mb-4">
+          <label class="block text-gray-700">Therapist</label>
+          <select v-model="currentStudent.therapist_ids" class="w-full px-4 py-2 border rounded-lg">
+            <option value="">Select a therapist</option>
+            <option v-for="therapist in therapists" :key="therapist.id" :value="therapist.id">{{ therapist.first_name+" "+therapist.last_name}} </option>
+          </select>
+          <p v-if="validationErrors?.therapist_ids" class="text-red-500 text-sm">
+              {{ validationErrors.therapist_ids[0] }}
+          </p>
+        </div>
+        <!-- Year Dropdown -->
+        <div class="mb-4">
+          <label for="year" class="block text-sm font-medium text-gray-700 mb-2">Select Year</label>
+          <select
+            id="year"
+            v-model="selectedYear"
+            class="block w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          >
+            <option v-for="year in availableYears" :key="year" :value="year">
+              {{ year }}
+            </option>
+          </select>
+        </div>
+
+        <!-- Month Dropdown -->
+        <div class="mb-4">
+          <label for="month" class="block text-sm font-medium text-gray-700 mb-2">Select Month</label>
+          <select
+            id="month"
+            v-model="selectedMonth"
+            class="block w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          >
+            <option v-for="(month, index) in months" :key="index" :value="month">
+              {{ month }}
+            </option>
+          </select>
+        </div>
+        <div class="mb-4">
+          <label for="file" class="block text-sm font-medium text-gray-700 mb-2">
+            Select File
+          </label>
+          <input
+            type="file"
+            id="file"
+            @change="handleFileInput"
+            class="block w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          />
+        </div>
+
+        <!-- Notes Input -->
+        <div class="mb-4">
+          <label for="notes" class="block text-sm font-medium text-gray-700 mb-2">
+            Add Notes (optional)
+          </label>
+          <textarea
+            v-model="notes"
+            class="block w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            rows="3"
+            placeholder="Write any additional notes here..."
+          ></textarea>
+        </div>
+
+        <!-- Actions -->
+        <div class="flex justify-end space-x-4">
+          <button
+            type="button"
+            @click="closeUploadModal"
+            class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 focus:outline-none"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none"
+          >
+            Upload
+          </button>
+        </div>
+      </form>
     </div>
   </div>
    <!-- Add Student Modal -->
@@ -390,6 +545,28 @@ const totalPages = ref(1);
 const validationErrors = ref({});
 const activeDropdown = ref(null);
 const isAddStudentModalOpen = ref(false);
+const selectedFile = ref(null);
+const notes = ref("");
+const selectedYear = ref(new Date().getFullYear()); // Default to current year
+const selectedMonth = ref("January"); // Default to January
+
+// Available Years and Months
+const currentYear = new Date().getFullYear();
+const availableYears = Array.from({ length: 10 }, (_, index) => currentYear - index); // Last 10 years
+const months = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
 
 // Format therapist names for the dropdown display
 const formattedTherapists = computed(() => 
@@ -412,6 +589,8 @@ const newStudent = ref({
 });
 
 const isEditStudentModalOpen = ref(false);
+
+const isUploadModalOpen = ref(false)
 
 const currentStudent = ref({
   id: '',
@@ -463,6 +642,13 @@ const openAddStudentModal = async () => {
   clases.value = clasTypeStore.clas;
 };
 
+const formatDate = (date) => {
+  return new Date(date).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
+};
 
 const openEditStudentModal = async (Student) => {
   isEditStudentModalOpen.value = true;
@@ -483,7 +669,7 @@ const openEditStudentModal = async (Student) => {
     })),
   };
 
-  await teacherStore.fetchTeachers()
+    await teacherStore.fetchTeachers()
     teachers.value = teacherStore.teachers;
     console.log('teach: ',teachers.value);
     await parentStore.fetchParents()
@@ -495,6 +681,14 @@ const openEditStudentModal = async (Student) => {
     await clasTypeStore.fetchClas()
     clases.value = clasTypeStore.clas;
 };
+
+const openUploadModal = async (Student) => {
+  isUploadModalOpen.value = true;
+  await Promise.all([
+    therapistStore.fetchTherapists(),
+  ]);
+  therapists.value = therapistStore.therapists;
+}
 
 const closeEditStudentModal = () => {
   isEditStudentModalOpen.value = false;
@@ -542,6 +736,10 @@ const submitEditStudent = async () => {
 const closeAddStudentModal = () => {
   isAddStudentModalOpen.value = false;
 };
+
+const closeUploadModal = () =>{
+  isUploadModalOpen.value = false;
+}
 
 const submitAddStudent = async () => {
   
