@@ -248,7 +248,7 @@
     <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md sm:w-2/3 md:w-1/2 lg:w-1/3 max-h-screen overflow-y-auto">
       <!-- Modal Header -->
       <div class="flex justify-between items-center mb-4">
-        <h2 class="text-2xl font-bold">Upload Therapist Report</h2>
+        <h2 class="text-2xl font-bold">Upload Therapy Report</h2>
         <button
           @click="closeUploadModal"
           class="text-gray-500 hover:text-gray-700 focus:outline-none"
