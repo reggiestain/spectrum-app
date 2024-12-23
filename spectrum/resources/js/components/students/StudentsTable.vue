@@ -753,7 +753,8 @@ const submitAddStudent = async () => {
     school_id: newStudent.value.school_id,
     condition: newStudent.value.condition,
     parent_id: newStudent.value.parent_id,
-    therapist_id: newStudent.value.therapist_ids,
+    therapist_id: 1,
+    therapist_ids: newStudent.value.therapist_ids,
     teacher_ids: newStudent.value.teacher_id,
     neuro_class_id: newStudent.value.neuro_class_id, // Ensure this is correct
   };

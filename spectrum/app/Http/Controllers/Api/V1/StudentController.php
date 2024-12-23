@@ -40,12 +40,16 @@ class StudentController extends Controller
             'school_id' => 'required|integer',
             'birth_date' => 'date',
             //'parent_id' => 'required',    
-            'neuro_class_id' => 'required'
+            'neuro_class_id' => 'required',
+            'therapist_ids' => 'nullable|array',
+            'therapist_ids.*.id' => 'required|integer', // Ensure each therapist has an integer ID
         ],[
             //'parent_id.required' => 'The parent field is required',
             'neuro_class_id.required' => 'The class field is required',
             'school_id.required' => 'The school field is required. Please select a school.',
             'teacher_id.required' => 'Teacher field is required. Please select a teacher.',
+            'therapist_ids.*.id.required' => 'Each therapist must have a valid ID.',
+            'therapist_ids.*.id.integer' => 'Each therapist ID must be an integer.',
         ]);
 
         if ($validator->fails()) {
@@ -53,7 +57,16 @@ class StudentController extends Controller
         }
 
         // Create student
-        $student = Student::create($request->all());
+        $student = Student::create($request->only([
+            'first_name', 'last_name', 'school_id', 'birth_date', 'neuro_class_id',
+            'condition','parent_id','school_id','teacher_id','therapist_id'
+        ]));
+
+        // Extract therapist IDs and sync
+        if ($request->filled('therapist_ids')) {
+            $therapistIds = collect($request->therapist_ids)->pluck('id')->toArray(); // Extract only the IDs
+            $student->therapists()->sync($therapistIds);
+        }
 
         return response()->json($student, 201);
     }
