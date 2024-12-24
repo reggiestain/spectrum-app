@@ -117,9 +117,10 @@ class StudentController extends Controller
         $student->update($request->only(['first_name', 'last_name', 'email', 'school_id','neuro_class_id','updated_at',
                                          'birth_date','teacher_id','parent_id','condition','address','created_at']));
 
-        // Update therapists relationship
-        if ($request->has('therapist_ids')) {
-            $student->therapists()->sync($request->therapist_ids); // Sync therapists with provided IDs
+         // Extract therapist IDs and sync
+         if ($request->filled('therapist_ids')) {
+            $therapistIds = collect($request->therapist_ids)->pluck('id')->toArray(); // Extract only the IDs
+            $student->therapists()->sync($therapistIds);
         }
 
         return response()->json([
