@@ -11,7 +11,7 @@ class TeacherController extends Controller
     // List all teachers
     public function index(Request $request)
     {
-        $perPage = $request->input('perPage', 10); // Default to 10 per page
+        $perPage = $request->input('perPage', 50); // Default to 10 per page
         $teachers = Teacher::paginate($perPage);
         return response()->json([
             'teachers' => $teachers->items(),  // Actual data
