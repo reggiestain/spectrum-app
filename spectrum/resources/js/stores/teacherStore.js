@@ -7,7 +7,7 @@ export const useTeacherStore = defineStore('teacherStore', {
     teachers: [],
     totalTeachers: 0,
     currentPage: 1,
-    perPage: 10,
+    perPage: 50,
     error: null,
     loading: false,
   }),
