@@ -8,11 +8,11 @@
         <div>
           <h1 class="text-3xl font-bold">Students Management</h1>
           <p class="text-gray-500 text-lg mt-1">
-            The options below allow you to add students to existing or new schools.
+            The options below allow you to add students to existing or new student.
           </p>
         </div>
         <!-- Stats Cards -->
-        <div class="flex space-x-4">
+        <!--<div class="flex space-x-4">
           <div class="bg-white p-4 shadow rounded-lg text-center">
             <h2 class="text-2xl font-bold">5249</h2>
             <p class="text-gray-500">Active Students</p>
@@ -25,7 +25,7 @@
             <h2 class="text-2xl font-bold">676</h2>
             <p class="text-gray-500">Archived Students</p>
           </div>
-        </div>
+        </div>-->
       </div>
 
       <!-- Actions Buttons -->
@@ -36,13 +36,14 @@
           </svg>
           <span>ADD</span>
         </button>
-
+        <!--
         <button class="bg-gray-200 text-black px-4 py-2 rounded-lg shadow">ACTIVE</button>
         <button class="bg-gray-200 text-black px-4 py-2 rounded-lg shadow">ARCHIVED</button>
+      -->
       </div>
 
       <!-- Filters Section -->
-      <div class="grid grid-cols-5 gap-4 mb-4">
+      <!--<div class="grid grid-cols-5 gap-4 mb-4">
         <div class="col-span-1">
           <input type="text" placeholder="Student" class="w-full px-4 py-2 border rounded-lg" />
         </div>
@@ -58,10 +59,18 @@
         <div class="col-span-1 flex justify-end">
           <button class="bg-red-500 text-white px-4 py-2 rounded-lg shadow">EXPORT</button>
         </div>
-      </div>
-
-      <!-- Students Table -->
-      <div class="bg-white shadow overflow-hidden sm:rounded-lg flex-1 overflow-hidden">
+      </div>-->
+  <!-- Filters Section -->
+  <div class="grid grid-cols-5 gap-4 mb-4">
+    <input 
+        type="text" 
+        v-model="searchQuery" 
+        placeholder="Search student by name..." 
+        class="w-full px-4 py-2 border rounded-lg mb-5"
+      />
+  </div>
+  <!-- Students Table -->
+  <div class="bg-white shadow overflow-hidden sm:rounded-lg flex-1 overflow-hidden">
   <!-- Wrapper for vertical scrolling -->
   <div class="overflow-y-auto max-h-[500px]">
     <!-- Wrapper for horizontal scrolling -->
@@ -82,7 +91,7 @@
           </tr>
         </thead>
         <tbody class="bg-white divide-y divide-gray-200">
-          <tr v-for="student in students" :key="student.id">
+          <tr v-for="student in filteredStudents" :key="student.id">
             <td class="px-6 py-4 whitespace-nowrap">
               <div class="flex items-center">
                 <svg
@@ -476,6 +485,18 @@ const selectedFile = ref(null);
 const notes = ref("");
 const selectedYear = ref(new Date().getFullYear()); // Default to current year
 const selectedMonth = ref("January"); // Default to January
+
+const searchQuery = ref(""); // New search input
+
+const filteredStudents = computed(() => {
+  if (!searchQuery.value.trim()) return students.value;
+  const query = searchQuery.value.toLowerCase();
+  return students.value.filter(student =>
+    `${student.first_name} ${student.last_name}`.toLowerCase().includes(query) ||
+    student.condition.toLowerCase().includes(query) ||
+    (student.school?.name?.toLowerCase() || "").includes(query)
+  );
+});
 
 // Available Years and Months
 const currentYear = new Date().getFullYear();
