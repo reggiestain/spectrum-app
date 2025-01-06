@@ -70,81 +70,78 @@
       />
   </div>
   <!-- Students Table -->
-  <div class="bg-white shadow overflow-hidden sm:rounded-lg flex-1 overflow-hidden">
-  <!-- Wrapper for vertical scrolling -->
-  <div class="overflow-y-auto max-h-[500px]">
-    <!-- Wrapper for horizontal scrolling -->
-    <div class="overflow-x-auto">
-      <table class="min-w-full divide-y divide-gray-200">
-        <thead class="bg-gray-50">
-          <tr>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Student</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">School(s)</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date of birth</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Condition</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Parent</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Class</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Therapist(s)</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Teacher(s)</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Created</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
-          </tr>
-        </thead>
-        <tbody class="bg-white divide-y divide-gray-200">
-          <tr v-for="student in filteredStudents" :key="student.id">
-            <td class="px-6 py-4 whitespace-nowrap">
-              <div class="flex items-center">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="h-8 w-8 text-gray-700 hover:text-red-600"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M5.121 17.804A4.001 4.001 0 0110 14h4a4.001 4.001 0 014.879 3.804M15 10a3 3 0 11-6 0 3 3 0 016 0z"
-                  />
-                </svg>
-                <div class="ml-4">
-                  <div class="text-sm font-medium text-gray-900">{{ student.first_name }} {{ student.last_name }}</div>
-                  <div class="text-sm text-gray-500">{{ student.email }}</div>
-                </div>
-              </div>
-            </td>
-            <td class="px-6 py-4 whitespace-nowrap">
-              <div class="text-sm text-gray-900">{{ student.school.name }}</div>
-            </td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ student.birth_date }}</td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ student.condition }}</td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ student.parent?.first_name}} {{student.parent?.last_name}}</td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ student.class?.name }}</td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900"> 
-              <span v-for="(therapist, index) in student.therapists" :key="therapist.id">
-                <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">
-                  {{ therapist.first_name }} {{ therapist.last_name }}   
-                </a>
-                <span class="text-blue-600 dark:text-blue-500">({{ therapist.specialization }})</span>
-                <span v-if="index < student.therapists.length - 1"><br/> </span>
-              </span>
-            </td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ student.teacher?.first_name }} {{ student.teacher?.last_name }}</td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ formatDate(student.created_at) }}</td>
-            <td class="p-3 text-center flex gap-2 justify-center">
-              <button @click="editStudent(student.id)" class="text-yellow-500 hover:text-yellow-400 focus:outline-none" title="Edit">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zm3 1.41L5.66 19H5v-.66l1.41-1.41 1.34 1.34zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
-                </svg>
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+<div class="bg-white shadow overflow-hidden sm:rounded-lg flex-1 overflow-hidden">
+      <!-- Wrapper for vertical scrolling -->
+      <div class="overflow-y-auto max-h-[500px]">
+        <!-- Wrapper for horizontal scrolling -->
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Student</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">School(s)</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date of birth</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Condition</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Parent</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Class</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Therapist(s)</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Teacher(s)</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Created</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              <tr v-for="student in filteredStudents" :key="student.id">
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-gray-700 hover:text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A4.001 4.001 0 0110 14h4a4.001 4.001 0 014.879 3.804M15 10a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                    <div class="ml-4">
+                      <div class="text-sm font-medium text-gray-900">{{ student.first_name }} {{ student.last_name }}</div>
+                      <div class="text-sm text-gray-500">{{ student.email }}</div>
+                    </div>
+                  </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="text-sm text-gray-900">{{ student.school.name }}</div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ student.birth_date }}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ student.condition }}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ student.parent?.first_name }} {{ student.parent?.last_name }}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ student.class?.name }}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900"> 
+                  <span v-for="(therapist, index) in student.therapists" :key="therapist.id">
+                    <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">{{ therapist.first_name }} {{ therapist.last_name }}</a>
+                    <span class="text-blue-600 dark:text-blue-500">({{ therapist.specialization }})</span>
+                    <span v-if="index < student.therapists.length - 1"><br/> </span>
+                  </span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ student.teacher?.first_name }} {{ student.teacher?.last_name }}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ formatDate(student.created_at) }}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  <!-- Actions Column -->
+                  <div class="flex justify-center gap-2">
+                    <button @click="editStudent(student.id)" class="text-yellow-500 hover:text-yellow-400 focus:outline-none" title="Edit">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zm3 1.41L5.66 19H5v-.66l1.41-1.41 1.34 1.34zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
+                      </svg>
+                    </button>
+                    <!-- Add more action buttons as needed -->
+                     <!-- Upload button -->
+                  <button @click="openUploadModal(student.id)" class="text-green-500 hover:text-green-400 focus:outline-none" title="Upload File">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M5 10l7 7 7-7h-4V3h-6v7H5z" />
+                    </svg>
+                  </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
 
       <!-- Pagination -->
       <div class="mt-4 flex justify-center space-x-4">
@@ -232,6 +229,21 @@
             </option>
           </select>
         </div>
+
+        <!-- Day Dropdown -->
+      <div class="mb-4">
+        <label for="day" class="block text-sm font-medium text-gray-700 mb-2">Select Day</label>
+        <select
+          id="day"
+          v-model="selectedDay"
+          class="block w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+        >
+          <option v-for="day in availableDays" :key="day" :value="day">
+            {{ day }}
+          </option>
+        </select>
+      </div>
+
         <div class="mb-4">
           <label for="file" class="block text-sm font-medium text-gray-700 mb-2">
             Select File
@@ -515,6 +527,8 @@ const months = [
   "November",
   "December",
 ];
+
+const availableDays =  Array.from({ length: 31 }, (_, i) => i + 1);  // Available days from 1 to 31
 
 // Format therapist names for the dropdown display
 const formattedTherapists = computed(() => 
