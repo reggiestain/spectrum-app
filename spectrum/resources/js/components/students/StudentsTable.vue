@@ -129,7 +129,7 @@
                     </button>
                     <!-- Add more action buttons as needed -->
                      <!-- Upload button -->
-                  <button @click="openUploadModal(student.id)" class="text-green-500 hover:text-green-400 focus:outline-none" title="Upload File">
+                  <button @click="openUploadModal(student)" class="text-green-500 hover:text-green-400 focus:outline-none" title="Upload File">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
                       <path d="M5 10l7 7 7-7h-4V3h-6v7H5z" />
                     </svg>
@@ -192,6 +192,7 @@
       <!-- Upload Form -->
       <form @submit.prevent="uploadFile">
         <!-- Teacher Dropdown -->
+        <label class="block text-gray-700"><b>{{ reportName }}</b></label>
         <div class="mb-4">
           <label class="block text-gray-700">Therapist</label>
           <select v-model="currentStudent.therapist_ids" class="w-full px-4 py-2 border rounded-lg">
@@ -495,6 +496,8 @@ const activeDropdown = ref(null);
 const isAddStudentModalOpen = ref(false);
 const selectedFile = ref(null);
 const notes = ref("");
+const selectedDay = ref("");
+const reportName = ref("");
 const selectedYear = ref(new Date().getFullYear()); // Default to current year
 const selectedMonth = ref("January"); // Default to January
 
@@ -646,6 +649,8 @@ const openEditStudentModal = async (Student) => {
 
 const openUploadModal = async (Student) => {
   isUploadModalOpen.value = true;
+  console.log("Student name: ",Student)
+  reportName.value = Student.first_name+" "+Student.last_name
   await Promise.all([
     therapistStore.fetchTherapists(),
   ]);
