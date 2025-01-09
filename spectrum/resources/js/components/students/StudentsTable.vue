@@ -98,7 +98,11 @@
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A4.001 4.001 0 0110 14h4a4.001 4.001 0 014.879 3.804M15 10a3 3 0 11-6 0 3 3 0 016 0z" />
                     </svg>
                     <div class="ml-4">
-                      <div class="text-sm font-medium text-gray-900">{{ student.first_name }} {{ student.last_name }}</div>
+                      <div class="text-sm font-medium text-gray-900">   
+                        <router-link :to="{ name: 'StudentProfile', params: { id: student.id } }" class="text-blue-500">
+                          {{ student.first_name }} {{ student.last_name }}
+                        </router-link>
+                      </div>
                       <div class="text-sm text-gray-500">{{ student.email }}</div>
                     </div>
                   </div>
@@ -190,7 +194,7 @@
       </div>
 
       <!-- Upload Form -->
-      <form @submit.prevent="uploadFile">
+      <form @submit.prevent="uploadReport">
         <!-- Teacher Dropdown -->
         <label class="block text-gray-700"><b>{{ reportName }}</b></label>
         <div class="mb-4">
@@ -199,8 +203,8 @@
             <option value="">Select a therapist</option>
             <option v-for="therapist in therapists" :key="therapist.id" :value="therapist.id">{{ therapist.first_name+" "+therapist.last_name}} </option>
           </select>
-          <p v-if="validationErrors?.therapist_ids" class="text-red-500 text-sm">
-              {{ validationErrors.therapist_ids[0] }}
+          <p v-if="reportValidationErrors?.therapist_ids" class="text-red-500 text-sm">
+              {{ reportValidationErrors.therapist_ids[0] }}
           </p>
         </div>
         <!-- Year Dropdown -->
@@ -255,6 +259,9 @@
             @change="handleFileInput"
             class="block w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           />
+          <p v-if="reportValidationErrors?.file" class="text-red-500 text-sm">
+            {{ reportValidationErrors.file }}
+          </p>
         </div>
 
         <!-- Notes Input -->
@@ -281,6 +288,7 @@
           </button>
           <button
             type="submit"
+            @click="uploadReport"
             class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none"
           >
             Upload
@@ -464,7 +472,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue';
+import { ref, reactive, onMounted, computed } from 'vue';
 import { useStudentStore } from '../../stores/studentStore';
 import { useSchoolStore } from '../../stores/useSchoolStore';
 import { useTherapistStore } from '../../stores/therapistStore';
@@ -532,6 +540,17 @@ const months = [
 ];
 
 const availableDays =  Array.from({ length: 31 }, (_, i) => i + 1);  // Available days from 1 to 31
+
+// Form Data and Validation
+const formData = reactive({
+  therapist_id: '',
+  report_title: '',
+  report_date: '',
+  notes: '',
+  file: null,
+});
+
+const reportValidationErrors = reactive({});
 
 // Format therapist names for the dropdown display
 const formattedTherapists = computed(() => 
@@ -671,6 +690,7 @@ const submitEditStudent = async () => {
     parent_id: currentStudent.value.parent_id,
     school_id: currentStudent.value.school_id,
     teacher_id: currentStudent.value.teacher_id,
+    therapist_id: 1,
     therapist_ids: currentStudent.value.therapist_ids.map(t => t.id),
   };
   try {
@@ -706,6 +726,8 @@ const closeAddStudentModal = () => {
 
 const closeUploadModal = () =>{
   isUploadModalOpen.value = false;
+  Object.keys(formData).forEach((key) => (formData[key] = key === 'file' ? null : ''));
+  Object.keys(reportValidationErrors).forEach((key) => delete validationErrors[key]);
 }
 
 const submitAddStudent = async () => {
@@ -720,7 +742,7 @@ const submitAddStudent = async () => {
     parent_id: newStudent.value.parent_id,
     therapist_id: 1,
     therapist_ids: newStudent.value.therapist_ids,
-    teacher_ids: newStudent.value.teacher_id,
+    teacher_id: newStudent.value.teacher_id,
     neuro_class_id: newStudent.value.neuro_class_id, // Ensure this is correct
   };
 
@@ -796,6 +818,43 @@ const deleteStudent = async (StudentId, StudentData) => {
       //console.error('An error occurred:', error);
       //validationErrors.value = error;
       //console.log("TEST: ",validationErrors.value.errors)
+    }
+  }
+};
+
+// Handle File Input
+const handleFileInput = (event) => {
+  formData.file = event.target.files[0];
+};
+
+// Upload Report
+const uploadReport = () => {
+  // Clear previous validation errors
+  //Object.keys(reportValidationErrors).forEach((key) => delete validationErrors[key]);
+
+  // Validate file
+  if (!formData.file) {
+    validationErrors.file = 'The file is required.';
+    return;
+  }
+  try {
+    const payload = new FormData();
+    payload.append('therapist_id', formData.therapist_id);
+    payload.append('report_title', formData.report_title);
+    payload.append('report_date', formData.report_date);
+    payload.append('notes', formData.notes);
+    payload.append('file', formData.file);
+
+    console.log('Payload:', [...payload.entries()]);
+
+    // Success message and reset
+    alert('Report uploaded successfully!');
+    closeUploadModal();
+  } catch (error) {
+    if (error.response && error.response.status === 422) {
+      Object.assign(reportValidationErrors, error.response.data.errors);
+    } else {
+      alert('An error occurred while uploading the report.');
     }
   }
 };

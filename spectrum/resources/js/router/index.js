@@ -7,6 +7,7 @@ import Dashboard from '../components/Dashboard.vue';
 import Users from '../components/users/UsersTable.vue';
 import Therapists from '../components/therapists/TherapistsTable.vue';
 import Students from '../components/students/StudentsTable.vue';
+import StudentProfile from '../components/students/StudentProfile.vue';
 import { useUserStore } from '../stores/userStore';
 
 const routes = [
@@ -45,6 +46,16 @@ const routes = [
     meta: { requiresAuth: true }, // Set meta field to indicate route requires authentication
   },
   // Add more routes here as needed
+  {
+    path: '/',
+    name: 'StudentProfile',
+    component: StudentProfile,
+  },
+  {
+    path: '/student/:id',
+    name: 'StudentProfile',
+    component: StudentProfile,
+  },
 ];
 
 const router = createRouter({

@@ -18,7 +18,7 @@ class TeachersSeeder extends Seeder
             ['first_name' => 'Stephanie', 'last_name' => 'Mensah', 'email' => 'stephanie.mensah@gmail.com'],
             ['first_name' => 'Patience', 'last_name' => 'Koranteng', 'email' => 'patience.koranteng@gmail.com'],
             ['first_name' => 'Amy', 'last_name' => 'Awortwe', 'email' => 'amy.awortwe@gmail.com'],
-            ['first_name' => 'Lydia', 'last_name' => '', 'email' => 'lydia@gmail.com'], // Empty last name if applicable
+            ['first_name' => 'Lydia', 'last_name' => '', 'email' => 'lydia@gmail.com'],
             ['first_name' => 'Doris', 'last_name' => 'Doe Amedze', 'email' => 'doris.doe.amedze@gmail.com'],
         ];
 

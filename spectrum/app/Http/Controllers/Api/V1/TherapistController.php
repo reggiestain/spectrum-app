@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Therapist;
 use Illuminate\Support\Facades\Validator;
+use App\Models\StudentReport;
 
 class TherapistController extends Controller
 {
@@ -117,4 +118,32 @@ class TherapistController extends Controller
 
         return response()->json(['message' => 'Therapist deleted successfully']);
     }
+
+    public function uploadReport(Request $request)
+    {
+        $request->validate([
+            'student_id' => 'required|exists:students,id',
+            'therapist_id' => 'required|exists:therapists,id',
+            'report_file' => 'required|file|max:102400', // Max file size 100MB
+        ]);
+
+        $file = $request->file('report_file');
+        $filePath = $file->store('reports', 'public');
+        $fileType = $file->getClientOriginalExtension();
+        $fileSize = $file->getSize();
+
+        // Save the report in the database
+        $report = StudentReport::create([
+            'student_id' => $request->student_id,
+            'therapist_id' => $request->therapist_id,
+            'report_title' => $request->input('report_title', 'Untitled Report'),
+            'file_path' => $filePath,
+            'file_type' => $fileType,
+            'file_size' => $fileSize,
+            'report_date' => now(),
+        ]);
+
+        return response()->json(['message' => 'Report uploaded successfully', 'report' => $report]);
+    }
+
 }
