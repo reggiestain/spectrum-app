@@ -18,17 +18,26 @@
           <div>
             <h2 class="text-2xl font-bold">{{ studentDetails?.first_name+" "+studentDetails?.last_name }}</h2>
             <p class="text-gray-500"><b>Date Of Birth:</b> {{ studentDetails?.birth_date }}</p>
-            <p class="text-gray-500"><b>Class:</b> {{ studentDetails.class?.name }}</p>
-            <p class="text-gray-500"><b>Teacher(s):</b> {{ studentDetails.teacher?.first_name+" "+studentDetails?.last_name }}</p>
-            <p class="text-gray-500"><b>Therapist(s):</b> {{ studentDetails.therapist?.first_name+" "+studentDetails?.last_name }}</p>
+            <p class="text-gray-500"><b>Class:</b> {{ studentDetails?.class.name }}</p>
+            <p class="text-gray-500"><b>Teacher(s):</b> {{ studentDetails?.teacher.first_name+" "+studentDetails?.last_name }}</p>
+            <p class="text-gray-500">
+              <b>Therapist(s):</b>
+              <span v-if="studentDetails?.therapists?.length">
+                <template v-for="(therapist, index) in studentDetails.therapists" :key="therapist.id">
+                  {{ therapist.first_name + " " + therapist.last_name }}
+                  <span v-if="index < studentDetails.therapists.length - 1">, </span>
+                </template>
+              </span>
+              <span v-else>No therapists assigned</span>
+            </p>
           </div>
         </div>
 
         <!-- Contact Information -->
         <div class="text-left">
-          <p class="text-gray-500"><b>Parent:</b> {{ studentDetails.parent.first_name+" "+studentDetails?.last_name }}</p>
-          <p class="text-gray-500"><b>Email:</b> {{ studentDetails.parent?.email }}</p>
-          <p class="text-gray-500"><b>Contact Number:</b> {{ studentDetails.parent?.phone }}</p>
+          <p class="text-gray-500"><b>Parent:</b> {{ studentDetails?.parent.first_name+" "+studentDetails?.parent.last_name }}</p>
+          <p class="text-gray-500"><b>Email:</b> {{ studentDetails?.parent.email }}</p>
+          <p class="text-gray-500"><b>Contact Number:</b> {{ studentDetails?.parent.phone }}</p>
         </div>
       </div>
 
