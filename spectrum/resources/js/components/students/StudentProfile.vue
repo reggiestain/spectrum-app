@@ -44,7 +44,7 @@
       <!-- Profile Actions -->
       <div class="flex space-x-4 mt-4">
         <button class="bg-blue-500 text-white px-4 py-2 rounded">Add profile section</button>
-        <button class="bg-blue-500 text-white px-4 py-2 rounded">Update profile</button>
+        <!--<button class="bg-blue-500 text-white px-4 py-2 rounded">Update profile</button>-->
         <button class="bg-gray-300 text-gray-700 px-4 py-2 rounded">Resources</button>
       </div>
 
