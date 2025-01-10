@@ -57,7 +57,7 @@
             <a href="#" class="text-blue-500 text-sm">Show details</a>
           </div>
           <div>
-            <button class="text-gray-500 hover:text-gray-700">✏️</button>
+            <!--<button class="text-gray-500 hover:text-gray-700">✏️</button>-->
           </div>
         </div>
       </div>
