@@ -5,6 +5,7 @@ import client from '../services/client';
 export const useStudentStore = defineStore('studentStore', {
   state: () => ({
     students: [],
+    student: {},
     totalStudents: 0,
     currentPage: 1,
     perPage: 10,
@@ -27,6 +28,16 @@ export const useStudentStore = defineStore('studentStore', {
       this.students = response.data.students;
       this.totalStudents = response.data.total;
       this.currentPage = page;
+    } catch (error) {
+      console.error('Failed to fetch students:', error.response.data);
+    }
+    },
+
+    async fetchStudent(id) {
+      this.loading = true;
+      try {
+        const response = await client.get('/students/'+id);
+      this.student = response.data;
     } catch (error) {
       console.error('Failed to fetch students:', error.response.data);
     }

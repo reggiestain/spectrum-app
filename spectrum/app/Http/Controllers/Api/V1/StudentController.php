@@ -76,7 +76,7 @@ class StudentController extends Controller
     // Display the specified student.
     public function show($id)
     {
-        $student = Student::find($id);
+        $student = Student::with(['parent','teacher','class','therapists','school'])->find($id);
 
         if (!$student) {
             return response()->json(['message' => 'Student not found'], 404);
