@@ -99,7 +99,7 @@ const uploadReport = () => {
         <div class="mb-4">
           <label class="block text-gray-700">Select Month</label>
           <select v-model="selectedMonth" class="w-full px-4 py-2 border rounded-lg">
-            <option selected value="">Select a month</option>
+            <option value="">Select a month</option>
             <option v-for="month in months" :key="month" :value="month">{{ month }}</option>
           </select>
           <p v-if="validationErrors.month" class="text-red-500 text-sm">
@@ -109,7 +109,7 @@ const uploadReport = () => {
         <div class="mb-4">
           <label class="block text-gray-700">Select Day</label>
           <select v-model="selectedDay" class="w-full px-4 py-2 border rounded-lg">
-            <option selected value="">Select a day</option>
+            <option value="">Select a day</option>
             <option v-for="day in availableDays" :key="day" :value="day">{{ day }}</option>
           </select>
           <p v-if="validationErrors.day" class="text-red-500 text-sm">
