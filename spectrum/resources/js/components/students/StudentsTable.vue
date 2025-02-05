@@ -93,6 +93,20 @@
             <tbody class="bg-white divide-y divide-gray-200">
               <tr v-for="student in filteredStudents" :key="student.id">
                 <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="flex justify-center gap-2">
+                    <button @click="editStudent(student.id)" class="text-yellow-500 hover:text-yellow-400 focus:outline-none" title="Edit">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zm3 1.41L5.66 19H5v-.66l1.41-1.41 1.34 1.34zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
+                      </svg>
+                    </button>
+                    <!-- Add more action buttons as needed -->
+                     <!-- Upload button -->
+                  <button @click="openUploadModal(student)" class="text-green-500 hover:text-green-400 focus:outline-none" title="Upload File">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M5 10l7 7 7-7h-4V3h-6v7H5z" />
+                    </svg>
+                  </button>
+                  </div>
                   <div class="flex items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-gray-700 hover:text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A4.001 4.001 0 0110 14h4a4.001 4.001 0 014.879 3.804M15 10a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -176,127 +190,21 @@
         </button>
       </div>
     </div>
-  </div>
-  <!--Modal Upload-->
-  <div v-if="isUploadModalOpen" class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-    <!-- Modal Box -->
-    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md sm:w-2/3 md:w-1/2 lg:w-1/3 max-h-screen overflow-y-auto">
-      <!-- Modal Header -->
-      <div class="flex justify-between items-center mb-4">
-        <h2 class="text-2xl font-bold">Upload Therapy Report</h2>
-        <button
-          @click="closeUploadModal"
-          class="text-gray-500 hover:text-gray-700 focus:outline-none"
-          aria-label="Close"
-        >
-          ✖
-        </button>
-      </div>
-
-      <!-- Upload Form -->
-      <form @submit.prevent="uploadReport">
-        <!-- Teacher Dropdown -->
-        <label class="block text-gray-700"><b>{{ reportName }}</b></label>
-        <div class="mb-4">
-          <label class="block text-gray-700">Therapist</label>
-          <select v-model="currentStudent.therapist_ids" class="w-full px-4 py-2 border rounded-lg">
-            <option value="">Select a therapist</option>
-            <option v-for="therapist in therapists" :key="therapist.id" :value="therapist.id">{{ therapist.first_name+" "+therapist.last_name}} </option>
-          </select>
-          <p v-if="reportValidationErrors?.therapist_ids" class="text-red-500 text-sm">
-              {{ reportValidationErrors.therapist_ids[0] }}
-          </p>
-        </div>
-        <!-- Year Dropdown -->
-        <div class="mb-4">
-          <label for="year" class="block text-sm font-medium text-gray-700 mb-2">Select Year</label>
-          <select
-            id="year"
-            v-model="selectedYear"
-            class="block w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-          >
-            <option v-for="year in availableYears" :key="year" :value="year">
-              {{ year }}
-            </option>
-          </select>
-        </div>
-
-        <!-- Month Dropdown -->
-        <div class="mb-4">
-          <label for="month" class="block text-sm font-medium text-gray-700 mb-2">Select Month</label>
-          <select
-            id="month"
-            v-model="selectedMonth"
-            class="block w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-          >
-            <option v-for="(month, index) in months" :key="index" :value="month">
-              {{ month }}
-            </option>
-          </select>
-        </div>
-
-        <!-- Day Dropdown -->
-      <div class="mb-4">
-        <label for="day" class="block text-sm font-medium text-gray-700 mb-2">Select Day</label>
-        <select
-          id="day"
-          v-model="selectedDay"
-          class="block w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-        >
-          <option v-for="day in availableDays" :key="day" :value="day">
-            {{ day }}
-          </option>
-        </select>
-      </div>
-
-        <div class="mb-4">
-          <label for="file" class="block text-sm font-medium text-gray-700 mb-2">
-            Select File
-          </label>
-          <input
-            type="file"
-            id="file"
-            @change="handleFileInput"
-            class="block w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-          />
-          <p v-if="reportValidationErrors?.file" class="text-red-500 text-sm">
-            {{ reportValidationErrors.file }}
-          </p>
-        </div>
-
-        <!-- Notes Input -->
-        <div class="mb-4">
-          <label for="notes" class="block text-sm font-medium text-gray-700 mb-2">
-            Add Notes (optional)
-          </label>
-          <textarea
-            v-model="notes"
-            class="block w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            rows="3"
-            placeholder="Write any additional notes here..."
-          ></textarea>
-        </div>
-
-        <!-- Actions -->
-        <div class="flex justify-end space-x-4">
-          <button
-            type="button"
-            @click="closeUploadModal"
-            class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 focus:outline-none"
-          >
-            Cancel
-          </button>
-          <button
-            type="submit"
-            @click="uploadReport"
-            class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none"
-          >
-            Upload
-          </button>
-        </div>
-      </form>
-    </div>
-  </div>
+   </div>
+   <!--Report Modal-->
+   <ReportReport
+    v-if="isUploadModalOpen"
+    :isUploadModalOpen="isUploadModalOpen"
+    :reportName="'Therapy Report'"
+    :therapists="therapists"
+    :currentStudent="selectedStudent"
+    :reportValidationErrors="reportValidationErrors"
+    :availableYears="availableYears"
+    :months="months"
+    :availableDays="availableDays"
+    @closeUploadModal="closeUploadModal"
+    @uploadReport="uploadReport"
+  />
    <!-- Add Student Modal -->
    <div v-if="isAddStudentModalOpen" class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
     <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md sm:w-2/3 md:w-1/2 lg:w-1/3 max-h-screen overflow-y-auto">
@@ -472,7 +380,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted, computed } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { useStudentStore } from '../../stores/studentStore';
 import { useSchoolStore } from '../../stores/useSchoolStore';
 import { useTherapistStore } from '../../stores/therapistStore';
@@ -483,6 +391,7 @@ import Sidebar from '../menu/Sidebar.vue';
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
 import MultiSelect from 'primevue/multiselect';
+import ReportReport from './ReportModal.vue'
 
 const studentStore = useStudentStore();
 const schoolStore = useSchoolStore();
@@ -506,6 +415,8 @@ const selectedFile = ref(null);
 const notes = ref("");
 const selectedDay = ref("");
 const reportName = ref("");
+const isUploadModalOpen = ref(false);
+const selectedStudent = ref(null);
 const selectedYear = ref(new Date().getFullYear()); // Default to current year
 const selectedMonth = ref("January"); // Default to January
 
@@ -541,17 +452,6 @@ const months = [
 
 const availableDays =  Array.from({ length: 31 }, (_, i) => i + 1);  // Available days from 1 to 31
 
-// Form Data and Validation
-const formData = reactive({
-  therapist_id: '',
-  report_title: '',
-  report_date: '',
-  notes: '',
-  file: null,
-});
-
-const reportValidationErrors = reactive({});
-
 // Format therapist names for the dropdown display
 const formattedTherapists = computed(() => 
   therapists.value.map(t => ({
@@ -573,8 +473,6 @@ const newStudent = ref({
 });
 
 const isEditStudentModalOpen = ref(false);
-
-const isUploadModalOpen = ref(false)
 
 const currentStudent = ref({
   id: '',
@@ -667,6 +565,7 @@ const openEditStudentModal = async (Student) => {
 };
 
 const openUploadModal = async (Student) => {
+  selectedStudent.value = Student;
   isUploadModalOpen.value = true;
   console.log("Student name: ",Student)
   reportName.value = Student.first_name+" "+Student.last_name
@@ -726,8 +625,6 @@ const closeAddStudentModal = () => {
 
 const closeUploadModal = () =>{
   isUploadModalOpen.value = false;
-  Object.keys(formData).forEach((key) => (formData[key] = key === 'file' ? null : ''));
-  Object.keys(reportValidationErrors).forEach((key) => delete validationErrors[key]);
 }
 
 const submitAddStudent = async () => {
@@ -822,41 +719,11 @@ const deleteStudent = async (StudentId, StudentData) => {
   }
 };
 
-// Handle File Input
-const handleFileInput = (event) => {
-  formData.file = event.target.files[0];
-};
-
-// Upload Report
-const uploadReport = () => {
-  // Clear previous validation errors
-  //Object.keys(reportValidationErrors).forEach((key) => delete validationErrors[key]);
-
-  // Validate file
-  if (!formData.file) {
-    validationErrors.file = 'The file is required.';
-    return;
-  }
-  try {
-    const payload = new FormData();
-    payload.append('therapist_id', formData.therapist_id);
-    payload.append('report_title', formData.report_title);
-    payload.append('report_date', formData.report_date);
-    payload.append('notes', formData.notes);
-    payload.append('file', formData.file);
-
-    console.log('Payload:', [...payload.entries()]);
-
-    // Success message and reset
-    alert('Report uploaded successfully!');
-    closeUploadModal();
-  } catch (error) {
-    if (error.response && error.response.status === 422) {
-      Object.assign(reportValidationErrors, error.response.data.errors);
-    } else {
-      alert('An error occurred while uploading the report.');
-    }
-  }
+// Handle File Upload
+const uploadReport = (formData) => {
+  console.log('Uploading report:', formData);
+  // TODO: Implement API call here
+  closeUploadModal();
 };
 
 onMounted(() => {
