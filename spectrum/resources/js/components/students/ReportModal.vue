@@ -13,9 +13,9 @@ const props = defineProps([
 ]);
 
 const emit = defineEmits(['closeUploadModal', 'uploadReport']);
-const selectedYear = ref('Select a year');
-const selectedMonth = ref('Select a month');
-const selectedDay = ref('Select a day');
+const selectedYear = ref('');
+const selectedMonth = ref('');
+const selectedDay = ref('');
 const notes = ref('');
 const selectedFile = ref(null);
 const therapist_id = ref(""); // Store the selected therapist ID
