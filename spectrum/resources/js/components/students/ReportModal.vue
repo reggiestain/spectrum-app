@@ -52,7 +52,7 @@ const uploadReport = () => {
   // **Reset form fields after submission**
   therapist_id.value = "";
   selectedYear.value = new Date().getFullYear(); // Reset to current year
-  selectedMonth.value = "January"; // Reset to default month
+  selectedMonth.value = ""; // Reset to default month
   selectedDay.value = "";
   selectedFile.value = null;
   notes.value = "";
