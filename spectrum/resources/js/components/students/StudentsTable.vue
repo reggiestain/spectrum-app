@@ -195,7 +195,7 @@
    <ReportReport
     v-if="isUploadModalOpen"
     :isUploadModalOpen="isUploadModalOpen"
-    :reportName="'Therapy Report'"
+    :reportName="'Report for '+reportName"
     :therapists="therapists"
     :currentStudent="selectedStudent"
     :reportValidationErrors="reportValidationErrors"
