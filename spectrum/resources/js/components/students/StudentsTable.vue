@@ -722,7 +722,7 @@ const deleteStudent = async (StudentId, StudentData) => {
 // Handle File Upload
 const uploadReport = (formData) => {
   console.log('Uploading report:', formData);
-  // TODO: Implement API call here
+  studentStore.uploadStudentReport(formData)
   closeUploadModal();
 };
 

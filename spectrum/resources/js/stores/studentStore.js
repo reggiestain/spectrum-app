@@ -81,5 +81,20 @@ export const useStudentStore = defineStore('studentStore', {
         this.loading = false;
       }
     },
+    // Upload Student Report
+    async uploadStudentReport(formData) {
+
+      try {
+        const response = await client.post('/student/report', formData, {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        });
+        console.log('Report uploaded successfully:', response.data);
+        return true; // Indicate success
+      } catch (error) {
+        console.error('Error uploading report:', error.response?.data);
+        this.reportValidationErrors = error.response?.data.errors || {};
+        return false;
+      }
+    },
   },
 });

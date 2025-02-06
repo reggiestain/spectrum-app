@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('report_title'); // Optional title for the report
             $table->string('file_path'); // Path to the uploaded report file
             $table->string('file_type')->nullable(); // Optional: File type (e.g., pdf, docx)
+            $table->text('notes')->nullable();
             $table->unsignedBigInteger('file_size')->nullable(); // Optional: File size in bytes
             $table->date('report_date')->nullable(); // Date the report was submitted
             $table->timestamps();

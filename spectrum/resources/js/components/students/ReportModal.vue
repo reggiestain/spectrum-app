@@ -19,16 +19,26 @@ const selectedDay = ref('');
 const notes = ref('');
 const selectedFile = ref(null);
 const therapist_id = ref(""); // Store the selected therapist ID
+const title = ref("");
 const validationErrors = ref({}); // Store errors
 
 const handleFileInput = (event) => {
   selectedFile.value = event.target.files[0];
 };
 
+const getMonthIndex = (monthName) => {
+  const months = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+  ];
+  return months.indexOf(monthName) + 1; // Convert to 1-based index (01-12)
+};
+
 const uploadReport = () => {
   validationErrors.value = {}; // Reset errors
   // Validate required fields
   if (!therapist_id.value) validationErrors.value.therapist_id = "Therapist is required.";
+  if (!selectedFile.value) validationErrors.value.title = "Report title is required";
   if (!selectedYear.value) validationErrors.value.year = "Year is required.";
   if (!selectedMonth.value) validationErrors.value.month = "Month is required.";
   if (!selectedDay.value) validationErrors.value.day = "Day is required.";
@@ -37,12 +47,16 @@ const uploadReport = () => {
   // Stop if there are validation errors
   if (Object.keys(validationErrors.value).length > 0) return;
 
+  // Construct report_date
+  const formattedMonth = String(getMonthIndex(selectedMonth.value)).padStart(2, "0"); // Ensure two-digit month
+  const formattedDay = selectedDay.value ? String(selectedDay.value).padStart(2, "0") : "01"; // Default to 01 if empty
+  const reportDate = `${selectedYear.value}-${formattedMonth}-${formattedDay}`;
+
   const formData = {
     student_id: props.currentStudent.id,
+    report_title: title.value,
     therapist_id: therapist_id.value, // Get selected therapist ID from dropdown
-    year: selectedYear.value,
-    month: selectedMonth.value,
-    day: selectedDay.value,
+    report_date: reportDate,
     file: selectedFile.value,
     notes: notes.value
   };
@@ -51,6 +65,7 @@ const uploadReport = () => {
   emit('uploadReport', formData);
   // **Reset form fields after submission**
   therapist_id.value = "";
+  title.value = "";
   selectedYear.value = new Date().getFullYear(); // Reset to current year
   selectedMonth.value = ""; // Reset to default month
   selectedDay.value = "";
@@ -72,6 +87,13 @@ const uploadReport = () => {
 
       <!-- Upload Form -->
       <form @submit.prevent="uploadReport">
+        <div class="mb-4">
+          <label class="block text-gray-700">Report Title</label>
+          <input v-model="title" class="w-full px-4 py-2 border rounded-lg" />
+          <p v-if="validationErrors.title" class="text-red-500 text-sm">
+            {{ validationErrors.title }}
+          </p>
+        </div>
         <div class="mb-4">
           <label class="block text-gray-700">Therapist</label>
           <select v-model="therapist_id" class="w-full px-4 py-2 border rounded-lg">

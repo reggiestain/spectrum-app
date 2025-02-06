@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
+use App\Models\StudentReport;
 
 class StudentController extends Controller
 {
@@ -145,5 +147,58 @@ class StudentController extends Controller
 
         $student->delete();
         return response()->json(['message' => 'Student deleted successfully']);
+    }
+
+    /**
+     * Store a new student report.
+     */
+    public function storeReport(Request $request)
+    {
+        try {
+            // ✅ Validate Request Data
+            $validated = $request->validate([
+                'student_id'   => 'required|exists:students,id',
+                'therapist_id' => 'required|exists:therapists,id',
+                'report_title' => 'required|string|max:255',
+                'file'         => 'required|file|max:10240', // Max 10MB
+                'notes'        => 'nullable|string',
+                'report_date'  => 'required|date',
+            ]);
+
+            $student = Student::findOrFail($request->student_id); // Fetch student by ID
+            // ✅ Handle File Upload
+            $file = $request->file('file');
+            $folderName = Str::slug($student->first_name . ' ' . $student->last_name, '_'); // Generate safe folder name
+            $filePath = $file->store("student_reports/{$folderName}", 'public'); // Save in public storage
+            $fileType = $file->getClientMimeType();
+            $fileSize = $file->getSize();
+
+            // ✅ Save Report Data
+            $report = StudentReport::create([
+                'student_id'   => $validated['student_id'],
+                'therapist_id' => $validated['therapist_id'],
+                'report_title' => $validated['report_title'],
+                'file_path'    => $filePath,
+                'file_type'    => $fileType,
+                'file_size'    => $fileSize,
+                'notes'        => $validated['notes'] ?? null,
+                'report_date'  => $validated['report_date'],
+            ]);
+
+            return response()->json([
+                'message' => 'Report uploaded successfully!',
+                'report'  => $report
+            ], 201);
+        } catch (ValidationException $e) {
+            return response()->json([
+                'message' => 'Validation failed',
+                'errors'  => $e->errors(),
+            ], 422);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Failed to upload report',
+                'error'   => $e->getMessage(),
+            ], 500);
+        }
     }
 }
