@@ -150,6 +150,21 @@ class StudentController extends Controller
     }
 
     /**
+     * Get all reports for a specific student.
+     */
+    public function getReports($studentId) {
+        $reports = StudentReport::with(['student', 'therapist'])
+            ->where('student_id', $studentId)
+            ->orderBy('report_date', 'desc')
+            ->get();
+
+        return response()->json([
+            'success' => true,
+            'data' => $reports
+        ], 200);
+    }
+
+    /**
      * Store a new student report.
      */
     public function storeReport(Request $request)

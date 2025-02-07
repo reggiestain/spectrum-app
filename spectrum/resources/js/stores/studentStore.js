@@ -6,6 +6,7 @@ export const useStudentStore = defineStore('studentStore', {
   state: () => ({
     students: [],
     student: {},
+    studentReports: [], // Store student reports
     totalStudents: 0,
     currentPage: 1,
     perPage: 10,
@@ -77,6 +78,20 @@ export const useStudentStore = defineStore('studentStore', {
       } catch (error) {
         console.error(`Error deleting student with ID: ${studentId}`, error.response?.data || error.message);
         this.error = error.response?.data?.message || "Failed to delete student.";
+      } finally {
+        this.loading = false;
+      }
+    },
+    // Fetch Student Reports
+    async getStudentReports(studentId) {
+      this.loading = true;
+      try {
+        const response = await client.get(`/student/reports/${studentId}`);
+        this.studentReports = response.data;
+        return this.studentReports;
+      } catch (error) {
+        console.error("Failed to fetch student reports:", error.response?.data || error.message);
+        return [];
       } finally {
         this.loading = false;
       }

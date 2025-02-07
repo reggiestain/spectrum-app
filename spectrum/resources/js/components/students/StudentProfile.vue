@@ -63,7 +63,7 @@
       </div>
 
       <!-- Reports Table -->
-      <StudentReport />
+      <StudentReport :studentId="studentId"/>
     </div>
   </div>
   </template>
@@ -79,9 +79,9 @@
   const studentDetails = ref(null);
 
   const fetchStudentDetails = async (studentId) => {
-  await studentStore.fetchStudent(studentId);
-    studentDetails.value = studentStore.student;
-    console.log("studentDetails: ",studentStore.student)
+          await studentStore.fetchStudent(studentId);
+            studentDetails.value = studentStore.student;
+            console.log("studentDetails: ",studentStore.student)
 };
 
   onMounted(() => {

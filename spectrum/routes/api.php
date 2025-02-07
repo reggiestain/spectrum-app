@@ -35,6 +35,7 @@ Route::middleware(['throttle:6600,1'])->group(function () {
     Route::put('/students/{id}', [App\Http\Controllers\Api\V1\StudentController::class, 'update']); 
     Route::delete('/students/{id}', [App\Http\Controllers\Api\V1\StudentController::class, 'destroy']);
     Route::post('/student/report', [App\Http\Controllers\Api\V1\StudentController::class, 'storeReport']); // Create a new therapist
+    Route::get('/student/reports/{studentId}', [App\Http\Controllers\Api\V1\StudentController::class, 'getReports']);
     //Therapist Routes
     Route::get('/therapists', [App\Http\Controllers\Api\V1\TherapistController::class, 'index']); // Fetch all therapists with pagination
     Route::get('/therapists/{id}', [App\Http\Controllers\Api\V1\TherapistController::class, 'show']); // Fetch a single therapist by ID

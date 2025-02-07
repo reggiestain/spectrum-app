@@ -1,80 +1,114 @@
 <template>
-    <div class="p-6 bg-white rounded shadow">
-      <h2 class="text-2xl font-bold mb-4">Therapy Reports</h2>
-      <p class="mb-6 text-gray-600">
-        Below is a list of attached daily reports.
-      </p>
-      <!--<button class="bg-blue-500 text-white px-4 py-2 rounded mb-4" @click="generateReport">
-        + Generate Report
-      </button>-->
-      <div class="bg-white shadow overflow-hidden sm:rounded-lg flex-1 overflow-hidden">
-        <!-- Wrapper for vertical scrolling -->
-        <div class="overflow-y-auto max-h-[500px]">
-          <!-- Wrapper for horizontal scrolling -->
-          <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-gray-200">
-              <thead class="bg-gray-50">
-                <tr>
-                  <th class="py-3 px-6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Report Name
-                  </th>
-                  <th class="py-3 px-6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Date Generated
-                  </th>
-                  <th class="py-3 px-6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Status
-                  </th>
-                  <th class="py-3 px-6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-              <tbody class="bg-white divide-y divide-gray-200">
-                <tr v-for="report in reports" :key="report.id" class="hover:bg-gray-100">
-                  <td class="py-4 px-6 text-sm font-medium text-gray-900">{{ report.name }}</td>
-                  <td class="py-4 px-6 text-sm text-gray-500">{{ report.date }}</td>
-                  <td class="py-4 px-6 text-sm">
-                    <span
-                      :class="{
-                        'text-green-500': report.status === 'Completed',
-                        'text-yellow-500': report.status === 'Pending',
-                        'text-red-500': report.status === 'Failed',
-                      }"
-                    >
-                      {{ report.status }}
-                    </span>
-                  </td>
-                  <td class="py-4 px-6 text-sm text-gray-500">
-                    <button class="text-blue-500 hover:underline" @click="viewReport(report.id)">Download</button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+  <div class="p-6 bg-white rounded shadow">
+    <h2 class="text-2xl font-bold mb-4">Therapy Reports</h2>
+    <p class="mb-6 text-gray-600">Below is a list of attached daily reports.</p>
+
+    <div class="bg-white shadow overflow-hidden sm:rounded-lg flex-1 overflow-hidden">
+      <!-- Wrapper for vertical scrolling -->
+      <div class="overflow-y-auto max-h-[500px]">
+        <!-- Wrapper for horizontal scrolling -->
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="py-3 px-6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Report Title
+                </th>
+                <th class="py-3 px-6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Therapist
+                </th>
+                <th class="py-3 px-6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Notes
+                </th>
+                <th class="py-3 px-6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Date Generated
+                </th>
+                <th class="py-3 px-6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Actions
+                </th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              <tr v-for="report in studentReports" :key="report.id" class="hover:bg-gray-100">
+                <td class="py-4 px-6 text-sm font-medium text-gray-900">{{ report.report_title }}</td>
+                <td class="py-4 px-6 text-sm text-gray-500">{{ report.therapist?.first_name+" "+report.therapist?.last_name || 'N/A' }}</td>
+                <td class="py-4 px-6 text-sm text-gray-500">{{ report.notes || 'No notes' }}</td>
+                <td class="py-4 px-6 text-sm text-gray-500">{{ report.report_date }}</td>
+                <td class="py-4 px-6 text-sm text-gray-500">
+                  <button class="text-blue-500 hover:underline" @click="previewReport(report.file_path)">
+                    View Report
+                  </button>
+                </td>
+              </tr>
+              <tr v-if="!studentReports.length">
+                <td colspan="5" class="text-center py-4 text-gray-500">No reports found.</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
-  </template>
-  
-  <script setup>
-  import { ref, onMounted, computed } from 'vue';
-  const reports = ref([
-    { id: 1, name: 'Therapy Report Q1', date: '2024-12-01', status: 'Completed' },
-    { id: 2, name: 'Therapy Report', date: '2024-12-05', status: 'Completed' },
-    { id: 3, name: 'Therapy reportt', date: '2024-11-30', status: 'Completed' },
-    // Add more reports as needed
-  ]);
-  
-  const generateReport = () => {
-    // Implement report generation logic
-  };
-  
-  const viewReport = (id) => {
-    // Implement logic to view the report details
-  };
-  </script>
-  
-  <style scoped>
-  /* Add any additional styling if needed */
-  </style>
-  
+    <!-- Document Viewer Modal (PDF & Word) -->
+    <div v-if="docPreview" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+      <div class="bg-white p-6 rounded-lg shadow-lg w-3/4 h-4/5 flex flex-col">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="text-xl font-bold">Report Preview</h3>
+          <button @click="closePreview" class="text-red-500 hover:text-red-700 text-lg">✖</button>
+        </div>
+        <iframe :src="docPreview" class="w-full flex-1 border rounded-lg"></iframe>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { ref, onMounted, watch } from "vue";
+import { useStudentStore } from "@/stores/studentStore";
+
+const props = defineProps(["studentId"]);
+const studentStore = useStudentStore();
+const studentReports = ref([]);
+const docPreview = ref(null);
+
+// Fetch Reports
+const getReport = async () => {
+  if (!props.studentId) return;
+  const reports = await studentStore.getStudentReports(props.studentId);
+  studentReports.value = reports.data || [];
+};
+
+// Preview Document (PDF or Word)
+const previewReport = (filePath, fileType) => {
+  if (!filePath) {
+    alert("File not available");
+    return;
+  }
+
+  const fileUrl = `/${filePath}`;
+
+  alert(fileUrl)
+
+  if (fileType === "pdf") {
+    docPreview.value = fileUrl;
+  } else if (fileType === "doc" || fileType === "docx") {
+    docPreview.value = `https://view.officeapps.live.com/op/embed.aspx?src=${window.location.origin}${fileUrl}`;
+  } else {
+    alert("Preview not supported for this file type.");
+  }
+};
+
+// Close Preview
+const closePreview = () => {
+  docPreview.value = null;
+};
+
+// Fetch reports when mounted
+onMounted(getReport);
+
+// Re-fetch reports if studentId changes
+watch(() => props.studentId, getReport);
+</script>
+
+<style scoped>
+/* Add any additional styling if needed */
+</style>
