@@ -93,7 +93,7 @@ const previewReport = (filePath) => {
     docPreview = filePath;
   } else if (fileType === "doc" || fileType === "docx") {
     // Preview DOC/DOCX files using Microsoft Office's online viewer
-    const encodedUrl = encodeURIComponent(`${window.location.origin}/${filePath}`);
+    const encodedUrl = encodeURIComponent(`${window.location.origin}/storage/${filePath}`);
     docPreview = `https://view.officeapps.live.com/op/embed.aspx?src=${encodedUrl}`;
   } else {
     alert("Preview not supported for this file type.");
@@ -103,7 +103,6 @@ const previewReport = (filePath) => {
   // Open the preview in a new tab or embed in an iframe (based on your app's requirements)
   window.open(docPreview, '_blank');
 };
-
 
 // Close Preview
 const closePreview = () => {
