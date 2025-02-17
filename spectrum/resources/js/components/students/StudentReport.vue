@@ -77,25 +77,33 @@ const getReport = async () => {
   studentReports.value = reports.data || [];
 };
 
-// Preview Document (PDF or Word)
-const previewReport = (filePath, fileType) => {
+const previewReport = (filePath) => {
   if (!filePath) {
     alert("File not available");
     return;
   }
 
-  const fileUrl = `/${filePath}`;
+  // Extract the file extension from the file path
+  const fileType = filePath.split('.').pop().toLowerCase();
 
-  alert(fileUrl)
+  let docPreview = '';
 
-  if (fileType === "pdf") {
-    docPreview.value = fileUrl;
+  if (fileType === "pdf") { 
+    // Directly preview PDF files
+    docPreview = filePath;
   } else if (fileType === "doc" || fileType === "docx") {
-    docPreview.value = `https://view.officeapps.live.com/op/embed.aspx?src=${window.location.origin}${fileUrl}`;
+    // Preview DOC/DOCX files using Microsoft Office's online viewer
+    const encodedUrl = encodeURIComponent(`${window.location.origin}/${filePath}`);
+    docPreview = `https://view.officeapps.live.com/op/embed.aspx?src=${encodedUrl}`;
   } else {
     alert("Preview not supported for this file type.");
+    return;
   }
+
+  // Open the preview in a new tab or embed in an iframe (based on your app's requirements)
+  window.open(docPreview, '_blank');
 };
+
 
 // Close Preview
 const closePreview = () => {
