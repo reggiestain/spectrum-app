@@ -36,8 +36,10 @@
                 <td class="py-4 px-6 text-sm text-gray-500">{{ report.report_date }}</td>
                 <td class="py-4 px-6 text-sm text-gray-500">
                   <button class="text-blue-500 hover:underline" @click="previewReport(report.file_path)">
-                    View Report
+                    Preview
                   </button>
+                  <span class="mx-2">|</span>
+                  <button class="text-green-500 hover:underline" @click="downloadReport(report.file_path)">Download</button>
                 </td>
               </tr>
               <tr v-if="!studentReports.length">
@@ -102,6 +104,19 @@ const previewReport = (filePath) => {
 
   // Open the preview in a new tab or embed in an iframe (based on your app's requirements)
   window.open(docPreview, '_blank');
+};
+
+const downloadReport = (filePath) => {
+  if (!filePath) {
+    alert("File not available for download");
+    return;
+  }
+
+  // Create a temporary link element to trigger the download
+  const link = document.createElement('a');
+  link.href = `${window.location.origin}/storage/${filePath}`;
+  link.download = filePath.split('/').pop(); // Extract the file name from the path
+  link.click();
 };
 
 // Close Preview
