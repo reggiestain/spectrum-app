@@ -6,9 +6,9 @@
       <!-- Header Section -->
       <div class="flex justify-between items-center mb-8">
         <div>
-          <h1 class="text-3xl font-bold">Students Management</h1>
+          <h1 class="text-3xl font-bold">Learner Management</h1>
           <p class="text-gray-500 text-lg mt-1">
-            The options below allow you to add students to existing or new student.
+            The options below allows you to add Learners.
           </p>
         </div>
         <!-- Stats Cards -->
@@ -78,7 +78,7 @@
           <table class="min-w-full divide-y divide-gray-200">
             <thead class="bg-gray-50">
               <tr>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Student</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Learner</th>
                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">School(s)</th>
                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date of birth</th>
                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Condition</th>
@@ -425,12 +425,14 @@ const searchQuery = ref(""); // New search input
 const filteredStudents = computed(() => {
   if (!searchQuery.value.trim()) return students.value;
   const query = searchQuery.value.toLowerCase();
+  
   return students.value.filter(student =>
-    `${student.first_name} ${student.last_name}`.toLowerCase().includes(query) ||
-    student.condition.toLowerCase().includes(query) ||
-    (student.school?.name?.toLowerCase() || "").includes(query)
+    `${student.first_name ?? ''} ${student.last_name ?? ''}`.toLowerCase().includes(query) ||
+    (student.condition?.toLowerCase() ?? '').includes(query) || 
+    (student.school?.name?.toLowerCase() ?? '').includes(query)
   );
 });
+
 
 // Available Years and Months
 const currentYear = new Date().getFullYear();

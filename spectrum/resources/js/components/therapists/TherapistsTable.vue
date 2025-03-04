@@ -61,7 +61,7 @@
       </div>
 
       <!-- therapists Table -->
-      <div class="bg-white shadow overflow-hidden sm:rounded-lg flex-1 overflow-auto">
+      <div class="bg-white shadow overflow-hidden sm:rounded-lg flex-1 overflow-hidden">
         <table class="min-w-full divide-y divide-gray-200">
           <thead class="bg-gray-50">
             <tr>
@@ -78,6 +78,13 @@
           <tbody class="bg-white divide-y divide-gray-200">
             <tr v-for="therapist in therapists" :key="therapist.id">
               <td class="px-6 py-4 whitespace-nowrap">
+                <div class="flex justify-center gap-2">
+                      <button @click="editTherapist(therapist.id)" class="text-yellow-500 hover:text-yellow-400 focus:outline-none" title="Edit">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                          <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zm3 1.41L5.66 19H5v-.66l1.41-1.41 1.34 1.34zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
+                        </svg>
+                      </button>
+                    </div>
                 <div class="flex items-center">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -111,32 +118,16 @@
                 </span>
               </td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ therapist.created_at }}</td>
-              <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-              <div class="relative inline-block text-left">
-                <div>
-                  <button
-                    @click="toggleMenu(therapist.id)"
-                    type="button"
-                    class="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
-                  >
-                  <!-- Vertical Ellipsis Icon -->
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                    <path d="M10 6a2 2 0 110-4 2 2 0 010 4zm0 5a2 2 0 110-4 2 2 0 010 4zm0 5a2 2 0 110-4 2 2 0 010 4z" />
-                  </svg>
-                  </button>
-                </div>
-                <div
-                  v-if="activeDropdown === therapist.id"
-                  class="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50"
-                >
-                  <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
-                    <a href="#" @click="editTherapist(therapist.id)" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Invite</a>
-                    <a href="#" @click="editTherapist(therapist.id)" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Edit</a>
-                    <a href="#" @click="deleteTherapist(therapist.id)" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Delete</a>                  
-                  </div>
-                </div>
-              </div>
-            </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <!-- Actions Column -->
+                    <div class="flex justify-center gap-2">
+                      <button @click="editTherapist(therapist.id)" class="text-yellow-500 hover:text-yellow-400 focus:outline-none" title="Edit">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                          <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zm3 1.41L5.66 19H5v-.66l1.41-1.41 1.34 1.34zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
+                        </svg>
+                      </button>
+                    </div>
+                </td>
             </tr>
           </tbody>
         </table>
