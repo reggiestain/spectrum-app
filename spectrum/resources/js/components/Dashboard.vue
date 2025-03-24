@@ -13,31 +13,31 @@
               <!--<img src="/images/neurosync-logo.png" alt="Neurosync Logo" class="w-12 h-12">-->
               <h1 class="text-xl font-semibold">NEUROSYNC ONLINE SOLUTION</h1>
             </div>
-            <div class="user-profile">
+            <!--<div class="user-profile">
               <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <circle cx="12" cy="12" r="10" />
                 <path d="M12 16v1m-2-2c0-1.1.9-2 2-2s2 .9 2 2m-2-5a2 2 0 100-4 2 2 0 000 4z" />
               </svg>
-            </div>
+            </div>-->
           </header>
     
           <!-- Neuro Students and Therapists Management Section -->
           <section class="p-8">
-            <div class="flex justify-between items-center mb-6">
+            <!--<div class="flex justify-between items-center mb-6">
               <h2 class="text-2xl font-semibold">Neuro Students and Therapists</h2>
               <button class="bg-red-600 text-white py-2 px-4 rounded">Export Report</button>
-            </div>
+            </div>-->
     
             <!-- Statistics Cards for Neuro Students and Therapists -->
             <div class="stats-grid grid grid-cols-3 gap-6 mb-6">
               <div class="stat-card bg-white p-6 rounded shadow-sm">
-                <h3 class="text-lg font-semibold">Total Neuro Students</h3>
-                <p class="text-3xl font-bold">450</p>
+                <h3 class="text-lg font-semibold">Total Learners</h3>
+                <p class="text-3xl font-bold">{{ totalStudents }}</p>
                 <p class="text-sm text-gray-500">Active and enrolled</p>
               </div>
               <div class="stat-card bg-white p-6 rounded shadow-sm">
                 <h3 class="text-lg font-semibold">Total Therapists</h3>
-                <p class="text-3xl font-bold">120</p>
+                <p class="text-3xl font-bold">{{ totalTherapists }}</p>
                 <p class="text-sm text-gray-500">Available across centers</p>
               </div>
               <div class="stat-card bg-white p-6 rounded shadow-sm">
@@ -68,10 +68,22 @@
     </template>
     
     <script setup>
+    import { onMounted, computed } from 'vue';
+    import { useStudentStore } from '../stores/studentStore';
+    import { useTherapistStore } from '../stores/therapistStore';
     import Sidebar from './menu/Sidebar.vue';
     import ChartLine from './charts/ChartLine.vue';
     import ChartPie from './charts/ChartPie.vue';
     
+    const studentStore = useStudentStore();
+    const therapistStore = useTherapistStore();
+    const totalStudents = computed(() => studentStore.totalStudents);
+    const totalTherapists = computed(() => therapistStore.totalTherapists);
+
+    onMounted(() => {
+      studentStore.fetchStudentCount();
+      therapistStore.fetchTherapistCount();
+    });
     </script>
     
     <style scoped>

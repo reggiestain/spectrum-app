@@ -29,6 +29,16 @@ class TherapistController extends Controller
         ]);
     }
 
+    // Get total student count
+    public function getTherapistCount()
+    {
+        $count = Therapist::count();
+
+        return response()->json([
+            'total_therapists' => $count
+        ], 200);
+    }
+
     // Fetch a single therapist by ID
     public function show($id)
     {

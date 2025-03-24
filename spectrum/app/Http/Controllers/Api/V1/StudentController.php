@@ -31,6 +31,16 @@ class StudentController extends Controller
         ]);
     }
 
+    // Get total student count
+    public function getStudentCount()
+    {
+        $count = Student::count();
+
+        return response()->json([
+            'total_students' => $count
+        ], 200);
+    }
+
     // Store a newly created student in storage.
     public function store(Request $request)
     {
@@ -81,7 +91,7 @@ class StudentController extends Controller
         $student = Student::with(['parent','teacher','class','therapists','school'])->find($id);
 
         if (!$student) {
-            return response()->json(['message' => 'Student not found'], 404);
+            return response()->json(['message' => 'Student not found..'], 404);
         }
 
         return response()->json($student);
@@ -142,7 +152,7 @@ class StudentController extends Controller
         $student = Student::find($id);
 
         if (!$student) {
-            return response()->json(['message' => 'Student not found'], 404);
+            return response()->json(['message' => 'Student not found.'], 404);
         }
 
         $student->delete();

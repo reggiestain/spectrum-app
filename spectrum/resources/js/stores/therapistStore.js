@@ -5,6 +5,7 @@ import client from '../services/client';
 export const useTherapistStore = defineStore('therapistStore', {
   state: () => ({
     therapists: [],
+    totalTherapists: 0,
     total: 0,
     perPage: 10,
     currentPage: 1,
@@ -28,6 +29,16 @@ export const useTherapistStore = defineStore('therapistStore', {
         this.currentPage = response.data.currentPage;
       } catch (error) {
         console.error('Error fetching therapists:', error);
+      }
+    },
+
+    // Fetch total student count
+    async fetchTherapistCount() {
+      try {
+        const response = await client.get('/therapists/count');
+        this.totalTherapists = response.data.total_therapists;
+      } catch (error) {
+        console.error('Failed to fetch student count:', error.response?.data || error.message);
       }
     },
 

@@ -15,33 +15,43 @@ use App\Http\Controllers\SchoolController;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
-
 Route::middleware(['throttle:6600,1'])->group(function () {
     Route::post('login',[AuthController::class,'login']);
     Route::post('register', [AuthController::class, 'register']);
     Route::get('users', [AuthController::class, 'getUsers']);
+Route::middleware(['auth:sanctum'])->group(function () {
     Route::put('/users/{id}', [AuthController::class, 'updateUser']); // Update user
     Route::delete('/users/{id}', [AuthController::class, 'deleteUser']); // Delete user
     Route::apiResource('schools', App\Http\Controllers\Api\V1\SchoolController::class);
     Route::apiResource('roles', App\Http\Controllers\Api\V1\RoleController::class);
-    Route::apiResource('students', App\Http\Controllers\Api\V1\StudentController::class);
+    //Route::apiResource('students', App\Http\Controllers\Api\V1\StudentController::class);
     Route::apiResource('parents', App\Http\Controllers\Api\V1\ParentController::class);
     Route::apiResource('teachers', App\Http\Controllers\Api\V1\TeacherController::class);
     Route::apiResource('classes', App\Http\Controllers\Api\V1\NeuroClassController::class);
     //Students Routes
     Route::get('/students', [App\Http\Controllers\Api\V1\StudentController::class, 'index']); // Fetch all therapists with pagination
+    Route::get('/students/count', [App\Http\Controllers\Api\V1\StudentController::class, 'getStudentCount']); // Get total student count
     Route::get('/students/{id}', [App\Http\Controllers\Api\V1\StudentController::class, 'show']); 
     Route::post('/students', [App\Http\Controllers\Api\V1\StudentController::class, 'store']); 
-    Route::put('/students/{id}', [App\Http\Controllers\Api\V1\StudentController::class, 'update']); 
-    Route::delete('/students/{id}', [App\Http\Controllers\Api\V1\StudentController::class, 'destroy']);
+    //Route::put('/students/{id}', [App\Http\Controllers\Api\V1\StudentController::class, 'update']); 
+    //Route::delete('/students/{id}', [App\Http\Controllers\Api\V1\StudentController::class, 'destroy']);
     Route::post('/student/report', [App\Http\Controllers\Api\V1\StudentController::class, 'storeReport']); // Create a new therapist
     Route::get('/student/reports/{studentId}', [App\Http\Controllers\Api\V1\StudentController::class, 'getReports']);
+    
     //Therapist Routes
     Route::get('/therapists', [App\Http\Controllers\Api\V1\TherapistController::class, 'index']); // Fetch all therapists with pagination
+    Route::get('/therapists/count', [App\Http\Controllers\Api\V1\TherapistController::class, 'getTherapistCount']);
     Route::get('/therapists/{id}', [App\Http\Controllers\Api\V1\TherapistController::class, 'show']); // Fetch a single therapist by ID
     Route::post('/therapists', [App\Http\Controllers\Api\V1\TherapistController::class, 'store']); // Create a new therapist
     Route::put('/therapists/{id}', [App\Http\Controllers\Api\V1\TherapistController::class, 'update']); // Update an existing therapist
     Route::delete('/therapists/{id}', [App\Http\Controllers\Api\V1\TherapistController::class, 'destroy']); // Delete a therapist
     //Therapist Categories Routes
     Route::apiResource('/therapy-categories', App\Http\Controllers\Api\V1\TherapyCategoryController::class);
-});
+    });
+}); 
+Route::any('{any}', function(){
+    return response()->json([
+        'status'    => false,
+        'message'   => 'Resource not found.',
+    ], 404);
+})->where('any', '.*');

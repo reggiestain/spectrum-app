@@ -27,11 +27,21 @@ export const useStudentStore = defineStore('studentStore', {
         params: { page, perPage: this.perPage },
       });
       this.students = response.data.students;
-      this.totalStudents = response.data.total;
+      //this.totalStudents = response.data.total;
       this.currentPage = page;
     } catch (error) {
       console.error('Failed to fetch students:', error.response.data);
     }
+    },
+
+    // Fetch total student count
+    async fetchStudentCount() {
+      try {
+        const response = await client.get('/students/count');
+        this.totalStudents = response.data.total_students;
+      } catch (error) {
+        console.error('Failed to fetch student count:', error.response?.data || error.message);
+      }
     },
 
     async fetchStudent(id) {
