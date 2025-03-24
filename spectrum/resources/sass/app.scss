@@ -1,16 +1,16 @@
-// ✅ Move Bootstrap dependencies to the top
+// ✅ Bootstrap Core Dependencies (must be loaded first)
 @use 'bootstrap/scss/functions';
 @use 'bootstrap/scss/variables';
 @use 'bootstrap/scss/mixins';
 @use 'bootstrap/scss/maps';
 
-// ✅ Now, import Bootstrap components
+// ✅ Bootstrap Components
 @use 'bootstrap/scss/bootstrap';
 
-// ✅ Import your variables (if any)
-@use 'variables';
+// ✅ Custom Variables and Fonts (after Bootstrap)
+@use 'variables'; 
 
-// ✅ Import fonts at the end (because `@import url()` is not allowed before @use)
+// ✅ Font Imports (must be last)
 @import url('https://fonts.bunny.net/css?family=Nunito');
 
 // ✅ Custom styles (if needed)
