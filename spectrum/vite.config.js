@@ -13,4 +13,16 @@ export default defineConfig({
         }),
         vue(),  // Add the Vue plugin here
     ],
+    css: {
+        preprocessorOptions: {
+            scss: {
+                additionalData: `
+                    @use 'bootstrap/scss/functions' as *;
+                    @use 'bootstrap/scss/variables' as *;
+                    @use 'bootstrap/scss/mixins' as *;
+                    @use 'bootstrap/scss/bootstrap' as *;
+                `,
+            },
+        },
+    },
 });
