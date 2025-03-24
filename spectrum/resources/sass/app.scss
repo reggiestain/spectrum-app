@@ -1,19 +1,11 @@
-// ✅ Bootstrap Core Dependencies (must be loaded first)
-@use 'bootstrap/scss/functions';
-@use 'bootstrap/scss/variables';
-@use 'bootstrap/scss/mixins';
-@use 'bootstrap/scss/maps';
-
-// ✅ Bootstrap Components
-@use 'bootstrap/scss/bootstrap';
-
-// ✅ Custom Variables and Fonts (after Bootstrap)
-@use 'variables'; 
-
-// ✅ Font Imports (must be last)
+// Fonts
 @import url('https://fonts.bunny.net/css?family=Nunito');
 
-// ✅ Custom styles (if needed)
-body {
-    font-family: 'Nunito', sans-serif;
-}
+// Bootstrap Imports
+@use 'bootstrap/scss/functions' as *;
+@use 'bootstrap/scss/variables' as *;
+@use 'bootstrap/scss/mixins' as *;
+@use 'bootstrap/scss/bootstrap' as *;
+
+// Variables
+@import 'variables';
