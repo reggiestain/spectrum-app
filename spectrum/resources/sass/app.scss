@@ -6,8 +6,8 @@
 // Fonts
 @import url('https://fonts.bunny.net/css?family=Nunito');
 
-// Your Variables
-@import 'variables';
+// Now you can import your custom variables or other styles after the `@use` rules
+@import 'variables';  // Custom variables, if needed
 
 // Now you can import bootstrap styles after the `@use` rules
 @use 'bootstrap/scss/bootstrap' as *;
