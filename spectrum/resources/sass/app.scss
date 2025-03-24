@@ -1,18 +1,16 @@
-// ✅ Load Fonts (this can stay)
-@import url('https://fonts.bunny.net/css?family=Nunito');
-
-// ✅ Use Bootstrap's SCSS functions first
+// ✅ Move @use to the top (before any @import or styles)
 @use 'bootstrap/scss/functions';
 @use 'bootstrap/scss/variables';
 @use 'bootstrap/scss/mixins';
-
-// ✅ Import your custom variables (if needed)
-@use 'variables';
-
-// ✅ Finally, load Bootstrap
 @use 'bootstrap/scss/bootstrap';
 
-// ✅ Now, add your custom styles below if needed
+// ✅ Now, import custom variables (if needed)
+@use 'variables';
+
+// ✅ Finally, import fonts (this must be after @use)
+@import url('https://fonts.bunny.net/css?family=Nunito');
+
+// ✅ Your custom styles can go here
 body {
     font-family: 'Nunito', sans-serif;
 }
