@@ -1,6 +1,6 @@
 import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
-import vue from '@vitejs/plugin-vue';  // Import the Vue plugin
+import vue from '@vitejs/plugin-vue';
 
 export default defineConfig({
     plugins: [
@@ -11,17 +11,12 @@ export default defineConfig({
             ],
             refresh: true,
         }),
-        vue(),  // Add the Vue plugin here
+        vue(),
     ],
     css: {
         preprocessorOptions: {
             scss: {
-                additionalData: `
-                    @use 'bootstrap/scss/functions' as *;
-                    @use 'bootstrap/scss/variables' as *;
-                    @use 'bootstrap/scss/mixins' as *;
-                    @use 'bootstrap/scss/bootstrap' as *;
-                `,
+                additionalData: `@use 'bootstrap/scss/functions' as *; @use 'bootstrap/scss/variables' as *; @use 'bootstrap/scss/mixins' as *;`,
             },
         },
     },
