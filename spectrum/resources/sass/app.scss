@@ -1,16 +1,19 @@
-// ✅ Move @use to the top (before any @import or styles)
+// ✅ Move Bootstrap dependencies to the top
 @use 'bootstrap/scss/functions';
 @use 'bootstrap/scss/variables';
 @use 'bootstrap/scss/mixins';
+@use 'bootstrap/scss/maps';
+
+// ✅ Now, import Bootstrap components
 @use 'bootstrap/scss/bootstrap';
 
-// ✅ Now, import custom variables (if needed)
+// ✅ Import your variables (if any)
 @use 'variables';
 
-// ✅ Finally, import fonts (this must be after @use)
+// ✅ Import fonts at the end (because `@import url()` is not allowed before @use)
 @import url('https://fonts.bunny.net/css?family=Nunito');
 
-// ✅ Your custom styles can go here
+// ✅ Custom styles (if needed)
 body {
     font-family: 'Nunito', sans-serif;
 }
