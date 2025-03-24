@@ -2,12 +2,10 @@
 @use 'bootstrap/scss/functions' as *;
 @use 'bootstrap/scss/variables' as *;
 @use 'bootstrap/scss/mixins' as *;
+@use 'bootstrap/scss/bootstrap' as *;
 
 // Fonts
 @import url('https://fonts.bunny.net/css?family=Nunito');
 
-// Now you can import your custom variables or other styles after the `@use` rules
-@import 'variables';  // Custom variables, if needed
-
-// Now you can import bootstrap styles after the `@use` rules
-@use 'bootstrap/scss/bootstrap' as *;
+// Your Variables
+@import 'variables';

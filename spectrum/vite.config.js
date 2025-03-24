@@ -13,11 +13,4 @@ export default defineConfig({
         }),
         vue(),
     ],
-    css: {
-        preprocessorOptions: {
-            scss: {
-                additionalData: `@use 'bootstrap/scss/functions' as *; @use 'bootstrap/scss/variables' as *; @use 'bootstrap/scss/mixins' as *;`,
-            },
-        },
-    },
 });
